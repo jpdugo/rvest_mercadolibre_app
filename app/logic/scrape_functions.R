@@ -4,7 +4,7 @@ box::use(
   rvest[html_nodes, html_attr, html_elements, html_text, read_html],
   purrr[map, map_dfr, keep, set_names, list_rbind, exec, pluck],
   tibble[tibble, as_tibble],
-  stringr[str_replace, str_c, str_trim],
+  stringr[str_replace_all, str_c, str_trim],
   glue[glue],
   furrr[future_map],
   rlang[list2]
@@ -71,7 +71,7 @@ get_data_zoom <- selector_fun(image, html_attr, list("data-zoom"))
 search_product <- function(search_string) {
   search <- search_string |>
     str_trim() |>
-    str_replace("\\s+", "\\+")
+    str_replace_all("\\s+", "\\+")
   link <- glue(
     "https://listado.mercadolibre.com.ar/{search}#D[A:{search}]",
     search = search
@@ -113,7 +113,7 @@ search_product <- function(search_string) {
 #' \item \code{href}: URLs of the publications
 #' }
 #' @export
-get_images <- function(data) {
+search_product_extra <- function(data) {
   results <- data$href |>
     future_map(
       .progress = TRUE, ~ {
@@ -126,7 +126,7 @@ get_images <- function(data) {
     ) |>
     set_names(data$title) |>
     (\(x) {
-      tibble::tibble(
+      tibble(
         title = names(x),
         image = map(x, ~ pluck(.x, "images")),
         price = map(x, ~ pluck(.x, "price")),
