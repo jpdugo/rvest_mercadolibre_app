@@ -15,6 +15,11 @@ box::use(
 title <- "h2.ui-search-item__title"
 image <- "img.ui-pdp-image.ui-pdp-gallery__figure__image"
 href <- "a.ui-search-item__group__element.ui-search-link"
+href_alt <- glue(
+  "{div} {a}",
+  div = "div.andes-carousel-snapped__slide",
+  a = "a.ui-search-link"
+)
 price <- glue(
   "{div_2} {span}",
   div_1 = "div.ui-pdp-container__row.ui-pdp-component-list.pr-16.pl-16",
@@ -55,6 +60,7 @@ get_next_button <- function(.html) {
 get_text <- selector_fun(title, html_text, list(trim = FALSE))
 get_price <- selector_fun(price, html_text, list(trim = FALSE))
 get_href <- selector_fun(href, html_attr, list("href"))
+get_href_alternative <- selector_fun(href_alt, html_attr, list("href"))
 get_data_zoom <- selector_fun(image, html_attr, list("data-zoom"))
 
 #' Search for a product on MercadoLibre and scrape the results
@@ -62,13 +68,14 @@ get_data_zoom <- selector_fun(image, html_attr, list("data-zoom"))
 #' This function takes a search string and scrapes the search results page on MercadoLibre.
 #'
 #' @param search_string \code{character} The search string to use
+#' @param max_pages \code{integer} The maximum number of pages to scrape
 #' @return \code{data.frame} A data frame with columns:
 #' \itemize{
 #' \item \code{title}: Titles of the publications
 #' \item \code{href}: URLs of the publications
 #' }
 #' @export
-search_product <- function(search_string) {
+search_product <- function(search_string, max_pages = 0) {
   search <- search_string |>
     str_trim() |>
     str_replace_all("\\s+", "\\+")
@@ -83,12 +90,22 @@ search_product <- function(search_string) {
     print(glue("Page: {link}"))
     i <- i + 1
     wp <- read_html(link)
+
+    href_result <- get_href(wp)
+    if (length(href_result) == 0) {
+      href_result <- get_href_alternative(wp)
+    }
+
     page_info[[i]] <- tibble(
       title = get_text(wp),
-      href = get_href(wp)
+      href = href_result
     )
 
     link <- get_next_button(wp)
+
+    if (max_pages > 0 && i >= max_pages) {
+      break
+    }
   }
 
   list_rbind(page_info)
