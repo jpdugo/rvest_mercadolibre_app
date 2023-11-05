@@ -25,7 +25,7 @@ test_that("search_product returns expected results", {
   expect_true(
     all(
       result_extra$price |>
-        map_lgl(~ length(.x) > 0, .progress = TRUE)
+        map_lgl(~ length(.x) > 0)
     )
   )
 })

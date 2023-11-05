@@ -7,7 +7,8 @@ box::use(
   stringr[str_replace_all, str_c, str_trim],
   glue[glue],
   furrr[future_map],
-  rlang[list2]
+  rlang[list2],
+  future[nbrOfWorkers]
 )
 
 # 1 Selectors -------------------------------------------------------------------------------------
@@ -131,23 +132,26 @@ search_product <- function(search_string, max_pages = 0) {
 #' }
 #' @export
 search_product_extra <- function(data) {
-  results <- data$href |>
-    future_map(
-      .progress = TRUE, ~ {
-        res <- read_html(.x)
-        list(
-          images = get_data_zoom(res),
-          price = get_price(res)
-        )
-      }
-    ) |>
-    set_names(data$title) |>
-    (\(x) {
-      tibble(
-        title = names(x),
-        image = map(x, ~ pluck(.x, "images")),
-        price = map(x, ~ pluck(.x, "price")),
-        href = data$href
-      )
-    })()
+  extract <- function(.x) {
+    res <- read_html(.x)
+    list(
+      images = get_data_zoom(res),
+      price = get_price(res)
+    )
+  }
+
+  create_tibble <- function(x, data) {
+    tibble::tibble(
+      title = data$title,
+      image = purrr::map(x, ~ purrr::pluck(.x, "images")),
+      price = purrr::map(x, ~ purrr::pluck(.x, "price")),
+      href = data$href
+    )
+  }
+
+  fn <- if (nbrOfWorkers() == 1) map else future_map
+
+  data$href |>
+    fn(.progress = TRUE, extract) |>
+    create_tibble(data)
 }
