@@ -41,7 +41,7 @@ next_button <- "a.andes-pagination__link.ui-search-link[title='Siguiente']"
 #' @param fun \code{function} pipable function to \code{html_elements}
 #' @param first_arg \code{character} name of the first argument to \code{fun}
 #' @param extra_args \code{list} arguments to pass to \code{fun}
-#' @return A function that takes in an HTML object and applies the given CSS
+#' @return Returns a function that takes in an HTML object and applies the given CSS
 #'   selector to it, then applies the given function to the resulting elements
 #'   along with any extra arguments.
 selector_fun <- function(selector, fun, extra_args, first_arg = "x") {
@@ -70,7 +70,7 @@ get_data_zoom <- selector_fun(image, html_attr, list("data-zoom"))
 #'
 #' @param search_string \code{character} The search string to use
 #' @param max_pages \code{integer} The maximum number of pages to scrape
-#' @return \code{data.frame} A data frame with columns:
+#' @return Returns \code{data.frame} A data frame with columns:
 #' \itemize{
 #' \item \code{title}: Titles of the publications
 #' \item \code{href}: URLs of the publications
@@ -123,7 +123,7 @@ search_product <- function(search_string, max_pages = 0) {
 #'  \item \code{href}: URLs to scrape
 #'  \item \code{title}: Titles of the publications
 #' }
-#' @return A tibble with columns:
+#' @return Returns a tibble with columns:
 #' \itemize{
 #' \item \code{title}: Titles of the publications
 #' \item \code{image}: URLs of the images
