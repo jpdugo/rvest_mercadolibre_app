@@ -1,5 +1,8 @@
 box::use(
-  shiny[bootstrapPage, div, moduleServer, NS, renderUI, tags, uiOutput, icon, eventReactive],
+  shiny[
+    bootstrapPage, div, moduleServer, NS, renderUI, tags, uiOutput, icon, eventReactive, validate,
+    need
+  ],
   DT[datatable, renderDT, DTOutput],
   shinyWidgets[searchInput],
   future[plan, multisession],
@@ -48,10 +51,14 @@ server <- function(id) {
     search_string <- search_sidebar$server("search_sidebar")
 
     current_search <- eventReactive(search_string(), {
-      search_string() |> scrape_functions$search_product()
+      if (search_string() == "") NULL else search_string() |> scrape_functions$search_product()
     })
 
     output$results_table <- renderDT({
+      validate(
+        need(!is.null(current_search()), "Nothing to show yet!")
+      )
+
       datatable(current_search())
     })
   })
