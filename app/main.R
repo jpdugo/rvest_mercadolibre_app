@@ -4,10 +4,10 @@ box::use(
     need
   ],
   DT[datatable, renderDT, DTOutput],
-  shinyWidgets[searchInput],
+  shinyWidgets[searchInput, useSweetAlert],
   future[plan, multisession],
   app / view / search_sidebar,
-  app / logic / scrape_functions,
+  app / logic / scrape_functions[...],
   glue[glue],
   dplyr[...],
   bslib[...],
@@ -26,6 +26,7 @@ ui <- function(id) {
     nav_spacer(),
     nav_panel(
       "Search",
+      useSweetAlert(theme = "borderless"),
       card(
         full_screen = TRUE,
         card_header(""),
@@ -51,7 +52,7 @@ server <- function(id) {
     search <- search_sidebar$server("search_sidebar")
 
     current_search <- eventReactive(search$string, {
-      if (search$string == "") NULL else search$string |> scrape_functions$search_product()
+      if (search$string == "") NULL else search$string |> search_product(search$max_pages)
     })
 
     output$results_table <- renderDT({
