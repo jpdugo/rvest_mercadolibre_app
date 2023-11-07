@@ -20,7 +20,7 @@ plan(multisession, workers = 10)
 ui <- function(id) {
   ns <- NS(id)
   page_navbar(
-    theme = bs_theme(version = 5),
+    theme = bs_theme(version = 5, preset = "darkly"),
     title = "Search MercadoLibre",
     sidebar = NULL,
     nav_spacer(),
@@ -48,10 +48,10 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    search_string <- search_sidebar$server("search_sidebar")
+    search <- search_sidebar$server("search_sidebar")
 
-    current_search <- eventReactive(search_string(), {
-      if (search_string() == "") NULL else search_string() |> scrape_functions$search_product()
+    current_search <- eventReactive(search$string, {
+      if (search$string == "") NULL else search$string |> scrape_functions$search_product()
     })
 
     output$results_table <- renderDT({
