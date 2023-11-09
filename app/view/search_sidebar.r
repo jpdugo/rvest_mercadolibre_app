@@ -1,5 +1,6 @@
 # Load required packages
 box::use(
+  glue[glue],
   shiny[...],
   bslib[...],
   shinyWidgets[searchInput, pickerInput, updatePickerInput, updateSearchInput],
@@ -90,7 +91,7 @@ server <- function(id, previous_search = NULL) {
         "1" = search_details$max_pages <- 1,
         "5" = search_details$max_pages <- 5,
         "10" = search_details$max_pages <- 10,
-        "Custom" = custom_value(custom_value() + 1),
+        "Custom" = custom_value(custom_value() + 1), # hack to force the confirm_alert to re-render
         "All" = search_details$max_pages <- 0
       )
     })
@@ -114,6 +115,22 @@ server <- function(id, previous_search = NULL) {
       },
       ignore_init = TRUE
     )
+
+    observeEvent(search_details$max_pages, {
+      if (search_details$max_pages > 0) {
+        updateRadioButtons(
+          session = session,
+          inputId = "n_pages",
+          label   = glue("Number of Pages: {search_details$max_pages}")
+        )
+      } else {
+        updateRadioButtons(
+          session = session,
+          inputId = "n_pages",
+          label   = glue("Number of Pages: All")
+        )
+      }
+    })
 
     search_details
   })

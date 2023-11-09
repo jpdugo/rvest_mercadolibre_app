@@ -1,5 +1,13 @@
+$color: #00bc8c;
+
 div.shiny-options-group div.radio {
   display: inline;
   margin-right: 10px;
   margin-bottom: 10px;
+}
+
+table.table.table-condensed.table-hover.row-border.dataTable.no-footer > tbody > tr.selected > td,
+table.table.table-condensed.table-hover.row-border.dataTable.no-footer > tbody > tr.selected:hover > td {
+  background-color: $color !important;
+  box-shadow: 0 0 3px $color !important;
 }
