@@ -22,7 +22,11 @@ plan(multisession, workers = 10)
 ui <- function(id) {
   ns <- NS(id)
   page_navbar(
-    theme = bs_theme(version = 5, preset = "darkly", primary = "#00bc8c"),
+    theme = bs_theme(
+      version = 5,
+      preset = "darkly",
+      primary = "#00bc8c"
+    ),
     title = "Search MercadoLibre",
     sidebar = NULL,
     nav_spacer(),
