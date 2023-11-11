@@ -3,11 +3,11 @@ box::use(
   testthat[...],
 )
 box::use(
-  app/main[...],
+  app / main[...],
 )
 
-test_that("main server works", {
+test_that("Datatable not visible at start", {
   testServer(server, {
-    expect_true(grepl(x = output$message$html, pattern = "Check out Rhino docs!"))
+    expect_error(output$results_table, "")
   })
 })
