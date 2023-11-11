@@ -81,11 +81,12 @@ server <- function(id) {
         )
       }),
       not_visible = NULL,
-      reset_paging = FALSE,
+      short_cols = "href",
+      reset_paging = TRUE,
       page_length = 50,
       not_searchable = "href",
-      currency = NULL,
-      ordering = FALSE
+      ordering = FALSE,
+      callback = 1
     )
   })
 }
