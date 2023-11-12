@@ -77,9 +77,9 @@ get_data_zoom <- selector_fun(image, html_attr, list("data-zoom"))
 #' \item \code{href}: URLs of the publications
 #' }
 #' @export
-search_product <- function(search_string, max_pages = 0, shiny_progress = FALSE) {
+search_product <- function(search_string, max_pages = 1, shiny_progress = FALSE) {
   # message to the console if the max_pages is not a positive integer
-  if (!is.numeric(max_pages) || max_pages < 0) {
+  if (!is.numeric(max_pages) || max_pages < 1) {
     warning("max_pages must be a positive integer, or 0 for no limit")
   }
 
@@ -110,7 +110,7 @@ search_product <- function(search_string, max_pages = 0, shiny_progress = FALSE)
 
     link <- get_next_button(wp)
 
-    if (shiny_progress) setProgress(value = i / if (max_pages == 0) 42 else max_pages)
+    if (shiny_progress) setProgress(value = i / max_pages)
   }
 
   list_rbind(page_info)

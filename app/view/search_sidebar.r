@@ -105,7 +105,7 @@ server <- function(id, previous_search = NULL) {
         "5" = search_details$max_pages <- 5,
         "10" = search_details$max_pages <- 10,
         "Custom" = custom_value(custom_value() + 1), # hack to force the confirm_alert to re-render
-        "All" = search_details$max_pages <- 0
+        "All" = search_details$max_pages <- 42
       )
     })
 
@@ -130,7 +130,7 @@ server <- function(id, previous_search = NULL) {
     )
 
     observeEvent(search_details$max_pages, {
-      if (search_details$max_pages > 0) {
+      if (search_details$max_pages > 0 && input$n_pages != "All") {
         updateRadioButtons(
           session = session,
           inputId = "n_pages",

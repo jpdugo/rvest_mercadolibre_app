@@ -84,6 +84,7 @@ server <- function(id) {
             paste("An error occurred:", e$message),
             type = "error"
           )
+          waiter_hide()
           NULL
         }
       )
