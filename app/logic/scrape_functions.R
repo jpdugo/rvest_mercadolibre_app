@@ -8,7 +8,8 @@ box::use(
   glue[glue],
   furrr[future_map],
   rlang[list2],
-  future[nbrOfWorkers]
+  future[nbrOfWorkers],
+  shiny[setProgress]
 )
 
 # 1 Selectors -------------------------------------------------------------------------------------
@@ -76,7 +77,12 @@ get_data_zoom <- selector_fun(image, html_attr, list("data-zoom"))
 #' \item \code{href}: URLs of the publications
 #' }
 #' @export
-search_product <- function(search_string, max_pages = 0) {
+search_product <- function(search_string, max_pages = 0, shiny_progress = FALSE) {
+  # message to the console if the max_pages is not a positive integer
+  if (!is.numeric(max_pages) || max_pages < 0) {
+    warning("max_pages must be a positive integer, or 0 for no limit")
+  }
+
   search <- search_string |>
     str_trim() |>
     str_replace_all("\\s+", "\\+")
@@ -87,7 +93,7 @@ search_product <- function(search_string, max_pages = 0) {
 
   page_info <- list()
   i <- 0
-  while (is.character(link)) {
+  while (is.character(link) && i < max_pages) {
     print(glue("Page: {link}"))
     i <- i + 1
     wp <- read_html(link)
@@ -104,9 +110,7 @@ search_product <- function(search_string, max_pages = 0) {
 
     link <- get_next_button(wp)
 
-    if (max_pages > 0 && i >= max_pages) {
-      break
-    }
+    if (shiny_progress) setProgress(value = i / if (max_pages == 0) 42 else max_pages)
   }
 
   list_rbind(page_info)

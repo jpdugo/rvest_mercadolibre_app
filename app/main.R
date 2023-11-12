@@ -1,10 +1,11 @@
 box::use(
   shiny[
     bootstrapPage, div, moduleServer, NS, renderUI, tags, uiOutput, icon, eventReactive, validate,
-    need, reactive, a, req, showNotification
+    need, reactive, a, req, showNotification, withProgress
   ],
   DT[datatable, renderDT, DTOutput],
   shinyWidgets[searchInput, useSweetAlert],
+  waiter[useWaiter, waiter_show, waiter_hide, spin_chasing_dots],
   future[plan, multisession],
   app / view / search_sidebar,
   app / logic / scrape_functions[...],
@@ -33,6 +34,7 @@ ui <- function(id) {
     nav_panel(
       "Search",
       useSweetAlert(theme = "borderless"),
+      useWaiter(),
       card(
         full_screen = TRUE,
         card_header(""),
@@ -55,11 +57,27 @@ server <- function(id) {
 
     search <- search_sidebar$server("search_sidebar")
 
-    current_search <- eventReactive(search$string, {
+    current_search <- eventReactive(list(
+      search$string,
+      search$reload
+    ), {
       req(search$string)
+      waiter_show(
+        html = spin_chasing_dots(),
+        color = "#2a2a2a"
+      )
       res <- tryCatch(
         {
-          search$string |> search_product(search$max_pages)
+          withProgress(
+            expr = {
+              res <- search$string |> search_product(search$max_pages, shiny_progress = TRUE)
+            },
+            message = "Searching...",
+            detail = "This may take a while",
+            value = 0
+          )
+          showNotification("Calculation complete", type = "message")
+          return(res)
         },
         error = function(e) {
           showNotification(
@@ -76,6 +94,7 @@ server <- function(id) {
       id = "fast_table",
       df = reactive({
         req(current_search())
+        waiter_hide()
         current_search() |> mutate(
           href = map_vec(
             .x = href,
