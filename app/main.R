@@ -36,7 +36,6 @@ ui <- function(id) {
       useSweetAlert(theme = "borderless"),
       useWaiter(),
       card(
-        full_screen = TRUE,
         card_header(""),
         layout_sidebar(
           sidebar = search_sidebar$ui(ns("search_sidebar")),
