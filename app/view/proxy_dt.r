@@ -44,6 +44,7 @@ ui <- function(id) {
 #' @param reset_paging \code{boolean}. Reset the paging when data is reloaded
 #' @param page_length \code{numeric}. Number of rows in each row
 #' @param center \code{character}. Columns that will have its content centered
+#' @param short_cols \code{character}. Columns that will have a max width, can also be numeric
 #' @param row_names \code{boolean}. Show row names
 #' @param not_searchable \code{character}. Names of the columns that will not be searchable
 #' @param editable \code{boolean}. If the table is editable.
@@ -59,6 +60,7 @@ server <- function(id,
                    reset_paging,
                    page_length,
                    center = NULL,
+                   short_cols = NULL,
                    row_names = TRUE,
                    not_searchable = NULL,
                    currency = NULL,
@@ -91,23 +93,23 @@ server <- function(id,
       })
 
       callback <- if (!is.null(callback)) {
-        glue::glue( # move this inside the module
+        glue::glue(
           "table.on('dblclick', 'td',
-          function() {{
-            document.getElementById('{input_name_1}').click()
-          }}
-        );
-        // Add a button to reset the table
-        let $container = $(table.table().container()).find('div:first');
-        $container.css('float', 'none')
-        let $button = $(
-        '<button class=\"btn btn-default action-button\">Reiniciar Tabla</button>'
-        ).css('float', 'left');
-        $container.prepend($button);
-        $button.on('click', function() {{
-          Shiny.setInputValue('{input_name_2}', '', {{priority: 'event'}});
-        }});",
-          input_name_1 = ns("boton"),
+            function() {{
+              document.getElementById('{input_name_1}').click()
+            }}
+          );
+          // Add a button to reset the table
+          let $container = $(table.table().container()).find('div:first');
+          $container.css('float', 'none')
+          let $button = $(
+            '<button class=\"btn btn-default action-button\">Reload Table</button>'
+          ).css('float', 'left');
+          $container.prepend($button);
+          $button.on('click', function() {{
+            Shiny.setInputValue('{input_name_2}', '', {{priority: 'event'}});
+          }});",
+          input_name_1 = ns("callback_button"),
           input_name_2 = ns("reload")
         ) |> JS()
       } else {
@@ -141,7 +143,19 @@ server <- function(id,
                 scrollX = TRUE,
                 pageLength = page_length,
                 columnDefs = list(
-                  list(width = "100px", targets = "_all"),
+                  list(
+                    targets = short_cols,
+                    createdCell = JS(
+                      "function(td) {
+                         $(td).css({
+                          'max-width': '150px',
+                          'overflow': 'hidden',
+                          'text-overflow': 'ellipsis',
+                          'white-space': 'nowrap'
+                        });
+                      }"
+                    )
+                  ),
                   list(visible = FALSE, targets = not_visible),
                   list(className = "dt-center", targets = center),
                   list(targets = c(not_searchable), searchable = FALSE)
@@ -149,7 +163,7 @@ server <- function(id,
               ),
               class = "row-border compact hover",
               rownames = row_names,
-              filter = "top",
+              filter = "none",
               editable = editable,
               callback = callback
             ) |>

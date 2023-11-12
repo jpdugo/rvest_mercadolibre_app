@@ -1,4 +1,11 @@
 $color: #00bc8c;
+$background: #434343;
+
+table.table.table-condensed.table-hover.row-border.dataTable.no-footer > tbody > tr.selected > td,
+table.table.table-condensed.table-hover.row-border.dataTable.no-footer > tbody > tr.selected:hover > td {
+  background-color: $color !important;
+  box-shadow: 0 0 3px $color !important;
+}
 
 div.shiny-options-group div.radio {
   display: inline;
@@ -6,8 +13,30 @@ div.shiny-options-group div.radio {
   margin-bottom: 10px;
 }
 
-table.table.table-condensed.table-hover.row-border.dataTable.no-footer > tbody > tr.selected > td,
-table.table.table-condensed.table-hover.row-border.dataTable.no-footer > tbody > tr.selected:hover > td {
+div.bs-searchbox > input {
+  background-color: $background !important;
+  color: white !important;
+}
+
+div.shiny-options-group div.radio input {
   background-color: $color !important;
-  box-shadow: 0 0 3px $color !important;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show {
+  background: #2a2a2a !important;
+}
+
+div.swal2-html-container input.shiny-input-number.form-control.shiny-bound-input,
+div.shiny-options-group div.radio input,
+div.input-group.search-text.shiny-bound-input > input,
+button.btn.dropdown-toggle.bs-placeholder.btn-light,
+div.dropdown.bootstrap-select.form-control div.dropdown-menu,
+ul.dropdown-menu.inner.show,
+li.no-results {
+  background-color: $background !important;
+  color: white !important;
+}
+
+input.form-control.shiny-bound-input {
+  color: white !important;
 }

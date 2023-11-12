@@ -3,6 +3,7 @@ box::use(
   glue[glue],
   shiny[...],
   bslib[...],
+  bsicons[bs_icon],
   shinyWidgets[searchInput, pickerInput, updatePickerInput, updateSearchInput],
   app / view / confirm_alert
 )
@@ -17,7 +18,16 @@ box::use(
 ui <- function(id) {
   ns <- NS(id)
   sidebar(
+    id = "sidebar",
     width = "350px",
+    actionButton(
+      inputId = ns("reload"),
+      label = tags$div(
+        style = "display: flex; justify-content: space-between; align-items: center;",
+        tags$span("Repeat Search", style = "flex-grow: 1; text-align: left;"),
+        tags$span(bs_icon("arrow-counterclockwise"), style = "text-align: right;")
+      )
+    ),
     searchInput(
       inputId = ns("search"),
       label = "Search ML",
@@ -32,7 +42,8 @@ ui <- function(id) {
       choices = NULL,
       options = list(
         `live-search` = TRUE
-      )
+      ),
+      stateInput = TRUE
     ),
     radioButtons(
       inputId = ns("n_pages"),
@@ -57,7 +68,8 @@ server <- function(id, previous_search = NULL) {
 
     search_details <- reactiveValues(
       string = NULL,
-      max_pages = NULL
+      max_pages = NULL,
+      reload = NULL
     )
 
     custom_value <- reactiveVal(0)
@@ -70,7 +82,7 @@ server <- function(id, previous_search = NULL) {
       updatePickerInput(
         session,
         "history",
-        selected = NULL,
+        selected = "",
         choices = history(),
         clearOptions = FALSE
       )
@@ -78,6 +90,7 @@ server <- function(id, previous_search = NULL) {
     })
 
     observeEvent(input$history, {
+      req(input$history)
       updateSearchInput(
         session,
         "search",
@@ -92,7 +105,7 @@ server <- function(id, previous_search = NULL) {
         "5" = search_details$max_pages <- 5,
         "10" = search_details$max_pages <- 10,
         "Custom" = custom_value(custom_value() + 1), # hack to force the confirm_alert to re-render
-        "All" = search_details$max_pages <- 0
+        "All" = search_details$max_pages <- 42
       )
     })
 
@@ -117,7 +130,7 @@ server <- function(id, previous_search = NULL) {
     )
 
     observeEvent(search_details$max_pages, {
-      if (search_details$max_pages > 0) {
+      if (search_details$max_pages > 0 && input$n_pages != "All") {
         updateRadioButtons(
           session = session,
           inputId = "n_pages",
@@ -130,6 +143,10 @@ server <- function(id, previous_search = NULL) {
           label   = glue("Number of Pages: All")
         )
       }
+    })
+
+    observeEvent(input$reload, {
+      search_details$reload <- input$reload
     })
 
     search_details
