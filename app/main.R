@@ -99,7 +99,7 @@ server <- function(id) {
         current_search() |> mutate(
           href = map_vec(
             .x = href,
-            .f = ~ as.character(a(href = .x, .x)),
+            .f = ~ as.character(a(href = .x, .x, target = "_blank")),
             .ptype = character()
           )
         )
