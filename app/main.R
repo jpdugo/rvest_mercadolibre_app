@@ -10,6 +10,8 @@ box::use(
   app / view / search_sidebar,
   app / logic / scrape_functions[...],
   app / view / proxy_dt,
+  app / view / download_excel,
+  shinyjs[useShinyjs],
   purrr[...],
   glue[glue],
   dplyr[...],
@@ -33,12 +35,18 @@ ui <- function(id) {
     nav_spacer(),
     nav_panel(
       "Search",
+      useShinyjs(),
       useSweetAlert(theme = "borderless"),
       useWaiter(),
       card(
         card_header(""),
         layout_sidebar(
-          sidebar = search_sidebar$ui(ns("search_sidebar")),
+          sidebar = sidebar(
+            id = "sidebar",
+            width = "350px",
+            search_sidebar$ui(ns("search_sidebar")),
+            download_excel$ui(ns("download_excel"))
+          ),
           proxy_dt$ui(ns("fast_table"))
         )
       ),
@@ -110,6 +118,11 @@ server <- function(id) {
       not_searchable = "href",
       ordering = FALSE,
       callback = 1
+    )
+
+    download_excel$server(
+      id = "download_excel",
+      data = current_search
     )
   })
 }
