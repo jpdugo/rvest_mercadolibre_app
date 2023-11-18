@@ -17,9 +17,7 @@ box::use(
 #' @export
 ui <- function(id) {
   ns <- NS(id)
-  sidebar(
-    id = "sidebar",
-    width = "350px",
+  tagList(
     actionButton(
       inputId = ns("reload"),
       label = tags$div(
