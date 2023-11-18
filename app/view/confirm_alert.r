@@ -27,7 +27,7 @@ box::use(
 #'
 #' @examples
 #' box::use(
-#'   app / view / mod_confirmAlert
+#'   app/view/mod_confirmAlert
 #' )
 #'
 #' ui <- fluidPage(

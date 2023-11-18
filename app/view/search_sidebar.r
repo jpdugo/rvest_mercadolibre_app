@@ -5,7 +5,7 @@ box::use(
   bslib[...],
   bsicons[bs_icon],
   shinyWidgets[searchInput, pickerInput, updatePickerInput, updateSearchInput],
-  app / view / confirm_alert
+  app/view/confirm_alert
 )
 
 #' UI function for search sidebar

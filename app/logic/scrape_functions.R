@@ -110,7 +110,7 @@ search_product <- function(search_string, max_pages = 1, shiny_progress = FALSE)
 
     link <- get_next_button(wp)
 
-    if (shiny_progress) setProgress(value = i / max_pages)
+    if (shiny_progress) setProgress(value = i/max_pages)
   }
 
   list_rbind(page_info)
