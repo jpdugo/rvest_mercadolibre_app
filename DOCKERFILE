@@ -1,0 +1,37 @@
+FROM r-base:4.3.2
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  git-core \
+  libcurl4-openssl-dev \
+  libfreetype-dev \
+  libpng-dev \
+  libtiff5-dev \
+  libjpeg-dev \
+  libgit2-dev \
+  libicu-dev \
+  libssl-dev \
+  libxml2-dev \
+  libharfbuzz-dev \
+  libfribidi-dev \
+  libfontconfig1-dev \
+  make pandoc zlib1g-dev && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /home
+
+COPY .Rprofile  renv.lock config.yml /home/
+
+ENV GITHUB_ACTIONS=true
+
+RUN Rscript -e "install.packages('renv')"
+RUN Rscript -e "renv::activate()"
+RUN Rscript -e "renv::restore(prompt = FALSE)"
+
+COPY app.R /home/
+COPY app /home/app/
+COPY rhino.yml /home/
+RUN mkdir /home/.git
+COPY .renvignore /home/
+COPY dependencies.R /home/dependencies.R
+
+EXPOSE 8080
+CMD R -e "options('shiny.port'=8080,shiny.host='0.0.0.0');rhino::app()"
