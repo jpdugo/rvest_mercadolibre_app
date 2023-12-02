@@ -19,7 +19,7 @@ image <- "img.ui-pdp-image.ui-pdp-gallery__figure__image"
 href <- "a.ui-search-item__group__element.ui-search-link"
 href_alt <- glue(
   "{div} {a}",
-  div = "div.andes-carousel-snapped__slide",
+  div = "div.ui-search-item__group__element.ui-search-item__title-grid",
   a = "a.ui-search-link"
 )
 price <- glue(
