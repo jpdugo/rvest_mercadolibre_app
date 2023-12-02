@@ -14,9 +14,9 @@ box::use(
   bsicons[...]
 )
 #' Search Module
-#' 
+#'
 #' Ui that encapsulates the search sidebar and the search results table modules.
-#' 
+#'
 #' @export
 ui <- function(id) {
   ns <- NS(id)
