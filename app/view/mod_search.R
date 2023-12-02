@@ -3,10 +3,10 @@ box::use(
     moduleServer, NS, eventReactive, reactive, a, req, showNotification, withProgress, tagList
   ],
   waiter[useWaiter, waiter_show, waiter_hide, spin_chasing_dots],
-  app/view/search_sidebar,
+  app/view/mod_search_sidebar,
   app/logic/scrape_functions[...],
-  app/view/proxy_dt,
-  app/view/download_excel,
+  app/view/mod_proxy_dt,
+  app/view/mod_download_excel,
   purrr[...],
   glue[glue],
   dplyr[...],
@@ -27,10 +27,10 @@ ui <- function(id) {
         sidebar = sidebar(
           id = "sidebar",
           width = "350px",
-          search_sidebar$ui(ns("search_sidebar")),
-          download_excel$ui(ns("download_excel"))
+          mod_search_sidebar$ui(ns("search_sidebar")),
+          mod_download_excel$ui(ns("download_excel"))
         ),
-        proxy_dt$ui(ns("fast_table"))
+        mod_proxy_dt$ui(ns("fast_table"))
       )
     )
   )
@@ -48,7 +48,7 @@ server <- function(id) {
     function(input, output, session) {
       ns <- session$ns
 
-      search <- search_sidebar$server("search_sidebar")
+      search <- mod_search_sidebar$server("search_sidebar")
 
       current_search <- eventReactive(list(
         search$string,
@@ -84,7 +84,7 @@ server <- function(id) {
         return(res)
       })
 
-      proxy_dt$server(
+      mod_proxy_dt$server(
         id = "fast_table",
         df = reactive({
           req(current_search())
@@ -106,7 +106,7 @@ server <- function(id) {
         callback = 1
       )
 
-      download_excel$server(
+      mod_download_excel$server(
         id = "download_excel",
         data = current_search
       )
