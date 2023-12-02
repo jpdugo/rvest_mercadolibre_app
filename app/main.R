@@ -25,7 +25,7 @@ ui <- function(id) {
     sidebar = NULL,
     nav_spacer(),
     nav_panel(
-      "Search",
+      title = "Search",
       useShinyjs(),
       useSweetAlert(theme = "borderless"),
       useWaiter(),
