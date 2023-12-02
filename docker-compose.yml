@@ -1,6 +1,6 @@
 version: "3"
 services:
-  rstudio:
+  shiny:
     build:
       context: .
       dockerfile: DOCKERFILE
