@@ -13,7 +13,10 @@ box::use(
   bslib[...],
   bsicons[...]
 )
-
+#' Search Module
+#' 
+#' Ui that encapsulates the search sidebar and the search results table modules.
+#' 
 #' @export
 ui <- function(id) {
   ns <- NS(id)
@@ -33,6 +36,11 @@ ui <- function(id) {
   )
 }
 
+#' Search Module
+#'
+#' Server function that encapsulates the search sidebar and the search results table modules.
+#'
+#' @param id
 #' @export
 server <- function(id) {
   moduleServer(
