@@ -14,19 +14,22 @@ ui <- function(id) {
 
   file_input <- fileInput(
     inputId = ns("file1"),
-    label   = "",
-    accept  = c(".xlsx")
+    label = "",
+    accept = c(".xlsx"),
+    width = "100%"
   )
 
   tagList(
-    titlePanel("Upload Excel"),
-    div(
-      tagQuery(file_input)$
-        find("label")$
-        filter(\(x, i) i == 1)$
-        remove()$
-        allTags()
-    ),
+    fluidRow(
+      column(6, titlePanel("Upload Excel")),
+      column(6, div(
+        tagQuery(file_input)$
+          find("label")$
+          filter(\(x, i) i == 1)$
+          remove()$
+          allTags()
+      ))
+    )
   )
 }
 

@@ -7,6 +7,7 @@ box::use(
   app/logic/scrape_functions[...],
   app/view/mod_proxy_dt,
   app/view/mod_download_excel,
+  app/logic/utils[format_href],
   purrr[...],
   glue[glue],
   dplyr[...],
@@ -89,13 +90,7 @@ server <- function(id) {
         df = reactive({
           req(current_search())
           waiter_hide()
-          current_search() |> mutate(
-            href = map_vec(
-              .x = href,
-              .f = ~ as.character(a(href = .x, .x, target = "_blank")),
-              .ptype = character()
-            )
-          )
+          current_search() |> format_href()
         }),
         not_visible = NULL,
         short_cols = "href",
