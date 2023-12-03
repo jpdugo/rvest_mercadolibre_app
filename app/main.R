@@ -7,7 +7,8 @@ box::use(
   shinyjs[useShinyjs],
   bslib[...],
   bsicons[...],
-  app/view/search
+  app / view / mod_search,
+  app / view / mod_compare
 )
 
 plan(multisession, workers = 10)
@@ -29,11 +30,15 @@ ui <- function(id) {
       useShinyjs(),
       useSweetAlert(theme = "borderless"),
       useWaiter(),
-      search$ui(ns("search")),
+      mod_search$ui(ns("search")),
       icon = bs_icon("search")
     ),
-    nav_panel("Compare", icon = bs_icon("layout-split")),
-    nav_panel("About", icon = bs_icon("chat-left-dots"))
+    nav_panel(
+      title = "Compare",
+      mod_compare$ui(ns("compare")),
+      icon = bs_icon("layout-split")
+    ),
+    nav_panel(title = "About", icon = bs_icon("chat-left-dots"))
   )
 }
 
@@ -41,6 +46,8 @@ ui <- function(id) {
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    search_result <- search$server("search")
+    search_result <- mod_search$server("search")
+
+    mod_compare$server("compare", search_result)
   })
 }

@@ -5,7 +5,7 @@ box::use(
   bslib[...],
   bsicons[bs_icon],
   shinyWidgets[searchInput, pickerInput, updatePickerInput, updateSearchInput],
-  app/view/confirm_alert
+  app/view/mod_confirm_alert
 )
 
 #' UI function for search sidebar
@@ -107,7 +107,7 @@ server <- function(id, previous_search = NULL) {
       )
     })
 
-    confirm_alert$server(
+    mod_confirm_alert$server(
       id = "confirm_alert",
       button = custom_value,
       text = div(
