@@ -97,7 +97,7 @@ server <- function(id) {
         reset_paging = TRUE,
         page_length = 50,
         not_searchable = "href",
-        ordering = FALSE,
+        ordering = TRUE,
         callback = 1
       )
 

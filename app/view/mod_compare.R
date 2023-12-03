@@ -51,7 +51,7 @@ server <- function(id, current_search) {
       reset_paging = TRUE,
       page_length = 50,
       not_searchable = "href",
-      ordering = FALSE,
+      ordering = TRUE,
       callback = 1
     )
 
@@ -75,7 +75,7 @@ server <- function(id, current_search) {
       reset_paging = TRUE,
       page_length = 50,
       not_searchable = "href",
-      ordering = FALSE,
+      ordering = TRUE,
       callback = 1
     )
   })
