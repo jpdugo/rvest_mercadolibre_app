@@ -35,7 +35,6 @@ server <- function(id) {
   moduleServer(
     id,
     function(input, output, session) {
-
       excel_uploaded <- eventReactive(input$file1, {
         tryCatch(
           {
@@ -54,7 +53,8 @@ server <- function(id) {
                 title = "Upload failed",
                 type = "error",
                 text = HTML(
-                  "Verify that the uploaded file has only two columns:
+                  "Verify that the uploaded file has at least one row
+                   and no more than two character columns:
                    <br>- <b>title</b> <br>-  <b>href</b>"
                 ),
                 html = TRUE
