@@ -47,7 +47,6 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     search_result <- mod_search$server("search")
-
     mod_compare$server("compare", search_result)
   })
 }

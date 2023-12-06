@@ -8,17 +8,27 @@
 			"ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
 					"packages": "github::rstudio/renv@v1.0.3"
 			}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"GitHub.copilot-chat",
+				"GitHub.copilot",
+				"GitHub.vscode-pull-request-github",
+				"eamodio.gitlens",
+				"dzhavat.bracket-pair-toggler"
+			]
+		},
+		"settings": { 
+			"editor.tabSize": 2,
+			"editor.cursorBlinking": "smooth",
+			"editor.cursorSmoothCaretAnimation": "on",
+			"editor.cursorStyle": "underline",
+			"editor.minimap.side": "left",
+			"editor.inlineSuggest.showToolbar": "always",
+			"files.defaultLanguage": "r"
+		}
 	}
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "R -q -e 'renv::install()'",
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
 }
