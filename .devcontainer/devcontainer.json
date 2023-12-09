@@ -28,7 +28,6 @@
 			"editor.inlineSuggest.showToolbar": "always",
 			"files.defaultLanguage": "r"
 		}
-	}
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "R -q -e 'renv::install()'",
+	},
+	"postCreateCommand": "pip install pre-commit"
 }
