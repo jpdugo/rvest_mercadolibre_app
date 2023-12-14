@@ -1,0 +1,33 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/rocker-org/devcontainer-templates/tree/main/src/r-ver
+{
+	"name": "R (rocker/r-ver base)",
+	"image": "ghcr.io/rocker-org/devcontainer/r-ver:4.3",
+	"features": {
+			"ghcr.io/rocker-org/devcontainer-features/renv-cache:latest": {},
+			"ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
+					"packages": "github::rstudio/renv@v1.0.3"
+			}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"GitHub.copilot-chat",
+				"GitHub.copilot",
+				"GitHub.vscode-pull-request-github",
+				"eamodio.gitlens",
+				"dzhavat.bracket-pair-toggler"
+			]
+		},
+		"settings": { 
+			"editor.tabSize": 2,
+			"editor.cursorBlinking": "smooth",
+			"editor.cursorSmoothCaretAnimation": "on",
+			"editor.cursorStyle": "underline",
+			"editor.minimap.side": "left",
+			"editor.inlineSuggest.showToolbar": "always",
+			"files.defaultLanguage": "r"
+		}
+	},
+	"postCreateCommand": "pip install pre-commit"
+}
