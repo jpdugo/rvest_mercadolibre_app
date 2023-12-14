@@ -5,7 +5,8 @@ box::use(
   bslib[...],
   bsicons[bs_icon],
   shinyWidgets[searchInput, pickerInput, updatePickerInput, updateSearchInput],
-  app/view/mod_confirm_alert
+  app/view/mod_confirm_alert,
+  shinyjs[show, hidden],
 )
 
 #' UI function for search sidebar
@@ -18,6 +19,7 @@ box::use(
 ui <- function(id) {
   ns <- NS(id)
   tagList(
+    hidden(
     actionButton(
       inputId = ns("reload"),
       label = tags$div(
@@ -25,6 +27,7 @@ ui <- function(id) {
         tags$span("Repeat Search", style = "flex-grow: 1; text-align: left;"),
         tags$span(bs_icon("arrow-counterclockwise"), style = "text-align: right;")
       )
+    )
     ),
     searchInput(
       inputId = ns("search"),
@@ -76,6 +79,7 @@ server <- function(id, previous_search = NULL) {
 
     observeEvent(input$search, {
       req(input$search)
+      show("reload")
       history(c(input$search, history()))
       updatePickerInput(
         session,
