@@ -3,7 +3,7 @@ box::use(
   DT[datatable, renderDT, DTOutput],
   shinyWidgets[searchInput, useSweetAlert],
   waiter[useWaiter],
-  future[plan, multisession],
+  future[plan, multicore],
   shinyjs[useShinyjs],
   bslib[...],
   bsicons[...],
@@ -11,7 +11,7 @@ box::use(
   app / view / mod_compare
 )
 
-plan(multisession, workers = 10)
+plan(multicore, workers = 10)
 
 #' @export
 ui <- function(id) {
@@ -47,7 +47,6 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     search_result <- mod_search$server("search")
-
     mod_compare$server("compare", search_result)
   })
 }

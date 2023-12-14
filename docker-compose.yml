@@ -1,0 +1,14 @@
+version: "3"
+services:
+  shiny:
+    build:
+      context: .
+      dockerfile: DOCKERFILE
+    environment:
+      - GITHUB_ACTIONS=true
+    ports:
+      - "8080:8080"
+    volumes:
+      - renv-cache:/root/.cache/R/renv/cache/v5/R-4.3/aarch64-unknown-linux-gnu
+volumes:
+  renv-cache:
