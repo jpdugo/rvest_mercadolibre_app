@@ -1,10 +1,9 @@
 box::use(
   shiny[moduleServer, NS],
   DT[datatable, renderDT, DTOutput],
-  shinyWidgets[searchInput, useSweetAlert],
+  shinyWidgets[searchInput],
   waiter[useWaiter],
   future[plan, multicore],
-  shinyjs[useShinyjs],
   bslib[...],
   bsicons[...],
   app / view / mod_search,
@@ -25,19 +24,8 @@ ui <- function(id) {
     title = "Search MercadoLibre",
     sidebar = NULL,
     nav_spacer(),
-    nav_panel(
-      title = "Search",
-      useShinyjs(),
-      useSweetAlert(theme = "borderless"),
-      useWaiter(),
-      mod_search$ui(ns("search")),
-      icon = bs_icon("search")
-    ),
-    nav_panel(
-      title = "Compare",
-      mod_compare$ui(ns("compare")),
-      icon = bs_icon("layout-split")
-    ),
+    mod_search$ui(ns("search")),
+    mod_compare$ui(ns("compare")),
     nav_panel(title = "About", icon = bs_icon("chat-left-dots"))
   )
 }
