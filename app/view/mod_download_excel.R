@@ -21,17 +21,21 @@ box::use(
 ui <- function(id) {
   ns <- NS(id)
   tagList(
-    hidden(textInput(
-      inputId     = ns("file_name"),
-      label       = "File Name",
-      placeholder = "Name of the file to download",
-    )),
-    hidden(actionButton(
-      inputId = ns("download"),
-      label   = "Download Data",
-      width   = "100%",
-      icon    = icon("download")
-    )),
+    hidden(
+      textInput(
+        inputId     = ns("file_name"),
+        label       = "File Name",
+        placeholder = "Name of the file to download",
+      )
+    ),
+    hidden(
+      actionButton(
+        inputId = ns("download"),
+        label   = "Download Data",
+        width   = "100%",
+        icon    = icon("download")
+      )
+    ),
     downloadButton(outputId = ns("download_data"), label = "") |>
       tagAppendAttributes(
         style = "visibility: hidden;"
