@@ -7,7 +7,8 @@ box::use(
   app / view / mod_proxy_dt,
   app / logic / utils[format_href],
   dplyr[mutate, anti_join],
-  bslib[...]
+  bslib[...],
+  bsicons[...]
 )
 
 #' @export
@@ -24,7 +25,9 @@ ui <- function(id) {
     mod_proxy_dt$ui(ns("new_publications"))
   )
 
-  tagList(
+  nav_panel(
+    title = "Compare",
+    icon = bs_icon("layout-split"),
     layout_column_wrap(
       width = 1 / 2,
       height = 300,

@@ -3,11 +3,13 @@ box::use(
     moduleServer, NS, eventReactive, reactive, a, req, showNotification, withProgress, tagList
   ],
   waiter[useWaiter, waiter_show, waiter_hide, spin_chasing_dots],
-  app/view/mod_search_sidebar,
-  app/logic/scrape_functions[...],
-  app/view/mod_proxy_dt,
-  app/view/mod_download_excel,
-  app/logic/utils[format_href],
+  shinyjs[useShinyjs],
+  shinyWidgets[useSweetAlert],
+  app / view / mod_search_sidebar,
+  app / logic / scrape_functions[...],
+  app / view / mod_proxy_dt,
+  app / view / mod_download_excel,
+  app / logic / utils[format_href],
   purrr[...],
   glue[glue],
   dplyr[...],
@@ -21,7 +23,13 @@ box::use(
 #' @export
 ui <- function(id) {
   ns <- NS(id)
-  tagList(
+  nav_panel(
+    title = "Search",
+    # there is no other place to put dependencies, maybe in the title argument?
+    useShinyjs(),
+    useSweetAlert(theme = "borderless"),
+    useWaiter(),
+    icon = bs_icon("search"),
     card(
       card_header(""),
       layout_sidebar(
