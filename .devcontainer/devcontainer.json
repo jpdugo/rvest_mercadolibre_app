@@ -4,11 +4,15 @@
 	"name": "R (rocker/r-ver base)",
 	"image": "ghcr.io/rocker-org/devcontainer/r-ver:4.3",
 	"features": {
-		  "ghcr.io/devcontainers/features/node:1": {},
+		  // "ghcr.io/devcontainers/features/node:1": {},
 			"ghcr.io/rocker-org/devcontainer-features/renv-cache:latest": {},
 			"ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
 					"packages": "github::rstudio/renv@v1.0.3"
-			}
+			},
+			"ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+				"packages": "xvfb"
+        // "packages": "libgtk2.0-0,libgtk-3-0,libgbm-dev,libnotify-dev,libnss3,libxss1,libasound2,libxtst6,xauth,xvfb"
+    }
 	},
 	"customizations": {
 		"vscode": {
