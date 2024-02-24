@@ -6,8 +6,8 @@ box::use(
   future[plan, multicore],
   bslib[...],
   bsicons[...],
-  app / view / mod_search,
-  app / view / mod_compare
+  app/view/mod_search,
+  app/view/mod_compare
 )
 
 plan(multicore, workers = 10)

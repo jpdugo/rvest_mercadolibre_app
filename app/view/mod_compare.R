@@ -3,9 +3,9 @@ box::use(
     NS, tagList, moduleServer, eventReactive, a, selectInput, observeEvent, req, reactive,
     titlePanel
   ],
-  app / view / mod_upload_excel,
-  app / view / mod_proxy_dt,
-  app / logic / utils[format_href],
+  app/view/mod_upload_excel,
+  app/view/mod_proxy_dt,
+  app/logic/utils[format_href],
   dplyr[mutate, anti_join],
   bslib[...],
   bsicons[...]
@@ -29,7 +29,7 @@ ui <- function(id) {
     title = "Compare",
     icon = bs_icon("layout-split"),
     layout_column_wrap(
-      width = 1 / 2,
+      width = 1/2,
       height = 300,
       card1,
       card2

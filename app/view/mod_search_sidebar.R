@@ -20,14 +20,14 @@ ui <- function(id) {
   ns <- NS(id)
   tagList(
     hidden(
-    actionButton(
-      inputId = ns("reload"),
-      label = tags$div(
-        style = "display: flex; justify-content: space-between; align-items: center;",
-        tags$span("Repeat Search", style = "flex-grow: 1; text-align: left;"),
-        tags$span(bs_icon("arrow-counterclockwise"), style = "text-align: right;")
+      actionButton(
+        inputId = ns("reload"),
+        label = tags$div(
+          style = "display: flex; justify-content: space-between; align-items: center;",
+          tags$span("Repeat Search", style = "flex-grow: 1; text-align: left;"),
+          tags$span(bs_icon("arrow-counterclockwise"), style = "text-align: right;")
+        )
       )
-    )
     ),
     searchInput(
       inputId = ns("search"),

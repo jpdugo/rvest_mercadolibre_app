@@ -1,6 +1,6 @@
 box::use(
   shiny[...],
-  app / logic / scrape_functions[...],
+  app/logic/scrape_functions[...],
 )
 
 #' @export
