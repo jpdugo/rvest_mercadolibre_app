@@ -4,7 +4,7 @@ box::use(
   rvest[html_nodes, html_attr, html_elements, html_text, read_html],
   purrr[map, map_dfr, keep, set_names, list_rbind, exec, pluck],
   tibble[tibble, as_tibble],
-  stringr[str_replace_all, str_c, str_trim],
+  stringr[str_replace_all, str_c, str_trim, str_length],
   glue[glue],
   furrr[future_map],
   rlang[list2],
@@ -28,7 +28,7 @@ price <- glue(
   div_2 = "div.ui-pdp-price__second-line",
   span = "span.andes-money-amount__fraction"
 )
-next_button <- "a.andes-pagination__link.ui-search-link[title='Siguiente']"
+next_button <- "a.andes-pagination__link[title='Siguiente']"
 
 # 2 Functions ---------------------------------------------------------------------------------
 
@@ -56,7 +56,7 @@ selector_fun <- function(selector, fun, extra_args, first_arg = "x") {
 
 get_next_button <- function(.html) {
   res <- selector_fun(next_button, html_attr, list("href"))(.html)
-  if (length(res)) res else FALSE
+  if (length(res) && str_length(res) > 0) res else FALSE
 }
 
 get_text <- selector_fun(title, html_text, list(trim = FALSE))
