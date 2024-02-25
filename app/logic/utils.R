@@ -1,7 +1,7 @@
 box::use(
-  dplyr[...],
-  purrr[...],
-  shiny[a]
+  dplyr[mutate],
+  purrr[map_vec],
+  shiny[a],
 )
 
 #' @export

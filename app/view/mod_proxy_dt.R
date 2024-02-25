@@ -1,16 +1,13 @@
 box::use(
   shiny[
-    NS, tagList, moduleServer, isolate, reactive, observeEvent, is.reactive, actionButton,
-    reactiveValues, validate, need, tags, div, req, reactiveVal
+    tagList, reactive, observeEvent, is.reactive, tags, div, reactiveValues
   ],
-  DT[
-    renderDT, DTOutput, dataTableProxy, replaceData, datatable, formatCurrency, updateFilters, JS,
-    selectRows, formatStyle, styleEqual, styleInterval
-  ],
+  shiny,
+  DT[renderDT, DTOutput, dataTableProxy, replaceData, datatable, formatCurrency, updateFilters, JS],
   glue[glue],
   shinyjs[hidden, click],
   stringr[str_detect],
-  rlang[is_empty]
+  rlang[is_empty],
 )
 
 #' @title Create a DT Module
@@ -21,7 +18,7 @@ box::use(
 #'
 #' @export
 ui <- function(id) {
-  ns <- NS(id)
+  ns <- shiny$NS(id)
   tagList(
     div(
       id = ns("dt_element"),
@@ -29,7 +26,7 @@ ui <- function(id) {
     ),
     div(
       style = "visibility: hidden;",
-      actionButton(ns("callback_button"), "")
+      shiny$actionButton(ns("callback_button"), "")
     )
   )
 }
@@ -69,7 +66,7 @@ server <- function(id,
                    ordering = TRUE,
                    extensions = list()) {
   stopifnot(is.reactive(df))
-  moduleServer(
+  shiny$moduleServer(
     id,
     function(input, output, session) {
       ns <- session$ns
@@ -80,7 +77,7 @@ server <- function(id,
         FALSE
       }
 
-      activate_table <- reactiveVal(FALSE)
+      activate_table <- shiny$reactiveVal(FALSE)
 
       observeEvent(df(), {
         if (nrow(df()) > 0) {
@@ -119,14 +116,14 @@ server <- function(id,
       observeEvent(activate_table(),
         {
           output$table <- renderDT({
-            validate(
-              need(activate_table(), "Nothing to show yet!")
+            shiny$validate(
+              shiny$need(activate_table(), "Nothing to show yet!")
             )
 
             input$reload
 
             datatable(
-              data = isolate(df()),
+              data = shiny$isolate(df()),
               selection = list(
                 mode     = "single",
                 selected = NULL,

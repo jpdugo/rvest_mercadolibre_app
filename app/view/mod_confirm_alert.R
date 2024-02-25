@@ -4,7 +4,7 @@ box::use(
     observeEvent, req
   ],
   shinyWidgets[confirmSweetAlert],
-  purrr
+  purrr,
 )
 
 #' @title Create a confirmAlert linked to a button input

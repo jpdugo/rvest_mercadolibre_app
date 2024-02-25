@@ -1,9 +1,9 @@
 box::use(
   shiny[testServer],
-  testthat[...],
+  testthat[expect_error, test_that],
 )
 box::use(
-  app / main[...],
+  app/main[server],
 )
 
 test_that("Datatable not visible at start", {

@@ -1,8 +1,8 @@
 $color: #00bc8c;
 $background: #434343;
 
-table.table.table-condensed.table-hover.row-border.dataTable.no-footer > tbody > tr.selected > td,
-table.table.table-condensed.table-hover.row-border.dataTable.no-footer > tbody > tr.selected:hover > td {
+table.table.table-condensed.table-hover.row-border > tbody > tr.selected > td,
+table.table.table-condensed.table-hover.row-border > tbody > tr.selected:hover > td {
   background-color: $color !important;
   box-shadow: 0 0 3px $color !important;
 }
