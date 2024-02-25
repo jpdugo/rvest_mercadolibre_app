@@ -4,10 +4,13 @@ box::use(
   shinyWidgets[searchInput],
   waiter[useWaiter],
   future[plan, multicore],
-  bslib[...],
-  bsicons[...],
-  app / view / mod_search,
-  app / view / mod_compare
+  bslib[page_navbar, bs_theme, nav_spacer, nav_panel],
+  bsicons[bs_icon],
+)
+
+box::use(
+  app/view/mod_search,
+  app/view/mod_compare,
 )
 
 plan(multicore, workers = 10)

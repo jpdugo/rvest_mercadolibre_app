@@ -1,26 +1,27 @@
 box::use(
-  shiny[...],
+  shiny[column, eventReactive, titlePanel, div],
+  shiny,
   utils[read.csv],
   shinyjs[reset],
   shinyWidgets[sendSweetAlert],
   readxl[read_xlsx],
   assertr[verify, has_all_names, has_class],
-  htmltools[tagQuery]
+  htmltools[tagQuery],
 )
 
 #' @export
 ui <- function(id) {
-  ns <- NS(id)
+  ns <- shiny$NS(id)
 
-  file_input <- fileInput(
+  file_input <- shiny$fileInput(
     inputId = ns("file1"),
     label = "",
     accept = c(".xlsx"),
     width = "100%"
   )
 
-  tagList(
-    fluidRow(
+  shiny$tagList(
+    shiny$fluidRow(
       column(6, titlePanel("Upload Excel")),
       column(6, div(
         tagQuery(file_input)$
@@ -35,7 +36,7 @@ ui <- function(id) {
 
 #' @export
 server <- function(id) {
-  moduleServer(
+  shiny$moduleServer(
     id,
     function(input, output, session) {
       excel_uploaded <- eventReactive(input$file1, {
