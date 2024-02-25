@@ -1,6 +1,5 @@
 # 0 Modules ---------------------------------------------------------------------------------
 box::use(
-  dplyr[...],
   rvest[html_nodes, html_attr, html_elements, html_text, read_html],
   purrr[map, map_dfr, keep, set_names, list_rbind, exec, pluck],
   tibble[tibble, as_tibble],
@@ -9,7 +8,7 @@ box::use(
   furrr[future_map],
   rlang[list2],
   future[nbrOfWorkers],
-  shiny[setProgress]
+  shiny[setProgress],
 )
 
 # 1 Selectors -------------------------------------------------------------------------------------
@@ -110,7 +109,7 @@ search_product <- function(search_string, max_pages = 1, shiny_progress = FALSE)
 
     link <- get_next_button(wp)
 
-    if (shiny_progress) setProgress(value = i/max_pages)
+    if (shiny_progress) setProgress(value = i / max_pages)
   }
 
   list_rbind(page_info)
@@ -147,8 +146,8 @@ search_product_extra <- function(data) {
   create_tibble <- function(x, data) {
     tibble::tibble(
       title = data$title,
-      image = purrr::map(x, ~ purrr::pluck(.x, "images")),
-      price = purrr::map(x, ~ purrr::pluck(.x, "price")),
+      image = map(x, ~ purrr::pluck(.x, "images")),
+      price = map(x, ~ purrr::pluck(.x, "price")),
       href = data$href
     )
   }

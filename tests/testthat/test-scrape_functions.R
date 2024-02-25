@@ -1,7 +1,10 @@
 box::use(
-  testthat[...],
-  app / logic / scrape_functions[...],
-  purrr[map_lgl]
+  testthat[expect_is, expect_equal, test_that, expect_true],
+  purrr[map_lgl],
+)
+
+box::use(
+  app/logic/scrape_functions[search_product, search_product_extra],
 )
 
 test_that("search_product returns expected results", {

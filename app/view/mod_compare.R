@@ -1,19 +1,23 @@
 box::use(
   shiny[
-    NS, tagList, moduleServer, eventReactive, a, selectInput, observeEvent, req, reactive,
+    tagList, eventReactive, a, selectInput, observeEvent, req, reactive,
     titlePanel
   ],
+  shiny,
+  dplyr[mutate, anti_join],
+  bslib[nav_panel, card, card_header, layout_column_wrap],
+  bsicons[bs_icon],
+)
+
+box::use(
   app/view/mod_upload_excel,
   app/view/mod_proxy_dt,
   app/logic/utils[format_href],
-  dplyr[mutate, anti_join],
-  bslib[...],
-  bsicons[...]
 )
 
 #' @export
 ui <- function(id) {
-  ns <- NS(id)
+  ns <- shiny$NS(id)
 
   card1 <- card(
     card_header(mod_upload_excel$ui(ns("upload_excel"))),
@@ -29,7 +33,7 @@ ui <- function(id) {
     title = "Compare",
     icon = bs_icon("layout-split"),
     layout_column_wrap(
-      width = 1/2,
+      width = 1 / 2,
       height = 300,
       card1,
       card2
@@ -39,7 +43,7 @@ ui <- function(id) {
 
 #' @export
 server <- function(id, current_search) {
-  moduleServer(id, function(input, output, session) {
+  shiny$moduleServer(id, function(input, output, session) {
     ns <- session$ns
     upload <- mod_upload_excel$server("upload_excel")
 

@@ -1,6 +1,9 @@
 box::use(
-  shiny[...],
-  app/logic/scrape_functions[...],
+  shiny[moduleServer, NS],
+)
+
+box::use(
+  app/logic/scrape_functions[search_product_extra],
 )
 
 #' @export

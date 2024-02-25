@@ -1,11 +1,12 @@
 box::use(
-  shiny[...],
+  shiny[observeEvent, icon, tagList],
+  shiny,
   shinyjs[click, show, hide, hidden],
   tibble[tibble],
   openxlsx[write.xlsx],
   glue[glue],
   shinyWidgets[sendSweetAlert],
-  shinyvalidate
+  shinyvalidate,
 )
 
 #' @title Download Excel
@@ -19,25 +20,25 @@ box::use(
 #' @export
 #' @name download_excel-module
 ui <- function(id) {
-  ns <- NS(id)
+  ns <- shiny$NS(id)
   tagList(
     hidden(
-      textInput(
+      shiny$textInput(
         inputId     = ns("file_name"),
         label       = "File Name",
         placeholder = "Name of the file to download",
       )
     ),
     hidden(
-      actionButton(
+      shiny$actionButton(
         inputId = ns("download"),
         label   = "Download Data",
         width   = "100%",
         icon    = icon("download")
       )
     ),
-    downloadButton(outputId = ns("download_data"), label = "") |>
-      tagAppendAttributes(
+    shiny$downloadButton(outputId = ns("download_data"), label = "") |>
+      shiny$tagAppendAttributes(
         style = "visibility: hidden;"
       )
   )
@@ -49,7 +50,7 @@ ui <- function(id) {
 #' @export
 #' @rdname download_excel-module
 server <- function(id, data) {
-  moduleServer(
+  shiny$moduleServer(
     id,
     function(input, output, session) {
       observeEvent(input$download, {
@@ -70,7 +71,7 @@ server <- function(id, data) {
         show("file_name")
       })
 
-      output$download_data <- downloadHandler(
+      output$download_data <- shiny$downloadHandler(
         filename = function() {
           glue(
             "{name}-{time}.xlsx",

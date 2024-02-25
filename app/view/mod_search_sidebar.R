@@ -1,12 +1,16 @@
 # Load required packages
 box::use(
   glue[glue],
-  shiny[...],
-  bslib[...],
+  shiny[tags, observeEvent, tagList, reactiveVal, req, icon, updateRadioButtons],
+  shiny,
+  bslib,
   bsicons[bs_icon],
   shinyWidgets[searchInput, pickerInput, updatePickerInput, updateSearchInput],
-  app/view/mod_confirm_alert,
   shinyjs[show, hidden],
+)
+
+box::use(
+  app/view/mod_confirm_alert,
 )
 
 #' UI function for search sidebar
@@ -17,10 +21,10 @@ box::use(
 #'
 #' @export
 ui <- function(id) {
-  ns <- NS(id)
+  ns <- shiny$NS(id)
   tagList(
     hidden(
-      actionButton(
+      shiny$actionButton(
         inputId = ns("reload"),
         label = tags$div(
           style = "display: flex; justify-content: space-between; align-items: center;",
@@ -46,7 +50,7 @@ ui <- function(id) {
       ),
       stateInput = TRUE
     ),
-    radioButtons(
+    shiny$radioButtons(
       inputId = ns("n_pages"),
       label = "Number of Pages:",
       choices = c("1", "5", "10", "Custom", "All")
@@ -64,16 +68,16 @@ ui <- function(id) {
 #'
 #' @export
 server <- function(id, previous_search = NULL) {
-  moduleServer(id, function(input, output, session) {
+ shiny$moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    search_details <- reactiveValues(
+    search_details <- shiny$reactiveValues(
       string = NULL,
       max_pages = NULL,
       reload = NULL
     )
 
-    custom_value <- reactiveVal(0)
+    custom_value <- shiny$reactiveVal(0)
 
     history <- if (is.null(previous_search)) reactiveVal(NULL) else reactiveVal(previous_search)
 

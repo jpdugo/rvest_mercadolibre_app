@@ -1,28 +1,31 @@
 box::use(
   shiny[
-    moduleServer, NS, eventReactive, reactive, a, req, showNotification, withProgress, tagList
+    eventReactive, reactive, a, req, showNotification, withProgress, tagList
   ],
+  shiny,
   waiter[useWaiter, waiter_show, waiter_hide, spin_chasing_dots],
   shinyjs[useShinyjs],
   shinyWidgets[useSweetAlert],
+  glue[glue],
+  bslib[layout_sidebar, card_header, sidebar, card, nav_panel],
+  bsicons[bs_icon],
+)
+
+box::use(
   app/view/mod_search_sidebar,
-  app/logic/scrape_functions[...],
+  app/logic/scrape_functions[search_product],
   app/view/mod_proxy_dt,
   app/view/mod_download_excel,
   app/logic/utils[format_href],
-  purrr[...],
-  glue[glue],
-  dplyr[...],
-  bslib[...],
-  bsicons[...]
 )
+
 #' Search Module
 #'
 #' Ui that encapsulates the search sidebar and the search results table modules.
 #'
 #' @export
 ui <- function(id) {
-  ns <- NS(id)
+  ns <- shiny$NS(id)
   nav_panel(
     title = "Search",
     # there is no other place to put dependencies, maybe in the title argument?
@@ -52,7 +55,7 @@ ui <- function(id) {
 #' @param id
 #' @export
 server <- function(id) {
-  moduleServer(
+  shiny$moduleServer(
     id,
     function(input, output, session) {
       ns <- session$ns
