@@ -32,3 +32,8 @@ test_that("search_product returns expected results", {
     )
   )
 })
+
+test_that("search_product returns finds the next button", {
+  result <- search_product("teclado", max_pages = 2)
+  expect_true(nrow(result) > 54)
+})
