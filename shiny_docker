@@ -24,7 +24,7 @@ COPY .Rprofile  renv.lock config.yml /home/
 ENV GITHUB_ACTIONS=true
 
 RUN Rscript -e "install.packages('renv')"
-RUN Rscript -e "renv::activate()"
+RUN Rscript -e "renv::activate(profile = 'default')"
 RUN Rscript -e "renv::restore(prompt = FALSE)"
 
 COPY app.R /home/

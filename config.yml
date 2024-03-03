@@ -1,3 +1,15 @@
 default:
   rhino_log_level: !expr Sys.getenv("RHINO_LOG_LEVEL", "INFO")
   rhino_log_file: !expr Sys.getenv("RHINO_LOG_FILE", NA)
+
+compose:
+  mysql:
+    host: "db"
+
+local:
+  mysql:
+    host: "127.0.0.1"
+
+none:
+  mysql:
+    host: NULL

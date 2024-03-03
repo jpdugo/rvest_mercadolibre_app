@@ -1,6 +1,6 @@
 box::use(
   shiny[
-    eventReactive, reactive, a, req, showNotification, withProgress, tagList
+    eventReactive, reactive, a, req, showNotification, withProgress, tagList, observeEvent
   ],
   shiny,
   waiter[useWaiter, waiter_show, waiter_hide, spin_chasing_dots],
@@ -9,6 +9,7 @@ box::use(
   glue[glue],
   bslib[layout_sidebar, card_header, sidebar, card, nav_panel],
   bsicons[bs_icon],
+  dplyr[pull],
 )
 
 box::use(
@@ -17,6 +18,7 @@ box::use(
   app/view/mod_proxy_dt,
   app/view/mod_download_excel,
   app/logic/utils[format_href],
+  app/logic/db_functions[register_search, get_search],
 )
 
 #' Search Module
@@ -54,13 +56,19 @@ ui <- function(id) {
 #'
 #' @param id
 #' @export
-server <- function(id) {
+server <- function(id, con) {
   shiny$moduleServer(
     id,
     function(input, output, session) {
       ns <- session$ns
 
-      search <- mod_search_sidebar$server("search_sidebar")
+      old_searches <- get_search(con)
+
+      search <- mod_search_sidebar$server(
+        id = "search_sidebar",
+        con = con,
+        previous_search = if (is.null(old_searches)) NULL else old_searches |> pull("search")
+      )
 
       current_search <- eventReactive(list(
         search$string,
@@ -94,6 +102,11 @@ server <- function(id) {
           }
         )
         return(res)
+      })
+
+      # Save to Mysql if the search is not null
+      observeEvent(current_search(), {
+        register_search(con, search$string, search$max_pages)
       })
 
       mod_proxy_dt$server(
