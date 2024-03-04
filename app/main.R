@@ -1,7 +1,7 @@
 db_mode <- "none"
 
 box::use(
-  shiny[moduleServer, NS, onStop],
+  shiny[moduleServer, NS, onSessionEnded],
   DT[datatable, renderDT, DTOutput],
   shinyWidgets[searchInput],
   waiter[useWaiter],
@@ -15,6 +15,7 @@ box::use(
 box::use(
   app/view/mod_search,
   app/view/mod_compare,
+  app/view/mod_search_prev,
   app/logic/connections[connect_mysql],
 )
 
@@ -40,7 +41,7 @@ ui <- function(id) {
     nav_spacer(),
     mod_search$ui(ns("search")),
     mod_compare$ui(ns("compare")),
-    nav_panel(title = "About", icon = bs_icon("chat-left-dots"))
+    mod_search_prev$ui(ns("search_prev"))
   )
 }
 
@@ -52,9 +53,12 @@ server <- function(id) {
     con <- connect_mysql(config$mysql$host)
 
     search_result <- mod_search$server("search", con)
+
     mod_compare$server("compare", search_result)
 
-    onStop(function() {
+    mod_search_prev$server("search_prev", con)
+
+    onSessionEnded(function() {
       if (!is.null(con)) DBI$dbDisconnect(con) else NULL
     })
   })

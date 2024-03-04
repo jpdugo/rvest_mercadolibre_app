@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS SearchResults (
   SearchResultsId INT AUTO_INCREMENT,
   SearchId INT,
   Title VARCHAR(255),
-  Href VARCHAR(500),
+  Href VARCHAR(2000),
   CreationDateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (SearchResultsId),
   FOREIGN KEY (SearchId) REFERENCES Search(SearchId)

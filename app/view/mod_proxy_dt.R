@@ -4,6 +4,7 @@ box::use(
   ],
   shiny,
   DT[renderDT, DTOutput, dataTableProxy, replaceData, datatable, formatCurrency, updateFilters, JS],
+  DT,
   glue[glue],
   shinyjs[hidden, click],
   stringr[str_detect],
@@ -49,6 +50,10 @@ ui <- function(id) {
 #' @param callback \code{boolean}. Activate a callback to listen for double clicks in a row
 #' @param ordering \code{boolean}. ordering of rows
 #' @param extensions \code{list}. List of extensions to be used in the table
+#' @param small_font \code{character}. Columns that will have a smaller font size
+#' @param dom \code{character}. The dom of the table
+#' @param clear_selection \code{boolean}. Clear the selection when data is reloaded
+#' @param ... \code{any}. Additional arguments to pass to \code{datatable}
 #'
 #' @export
 server <- function(id,
@@ -64,7 +69,11 @@ server <- function(id,
                    editable = FALSE,
                    callback = NULL,
                    ordering = TRUE,
-                   extensions = list()) {
+                   extensions = list(),
+                   small_font = NULL,
+                   dom = "frtip",
+                   clear_selection = FALSE,
+                   ...) {
   stopifnot(is.reactive(df))
   shiny$moduleServer(
     id,
@@ -133,7 +142,7 @@ server <- function(id,
               style = "auto",
               extensions = extensions,
               options = list(
-                dom = "frtip",
+                dom = dom,
                 keys = keys,
                 rowReorder = FALSE,
                 ordering = ordering,
@@ -162,9 +171,11 @@ server <- function(id,
               rownames = row_names,
               filter = "none",
               editable = editable,
-              callback = callback
+              callback = callback,
+              ...
             ) |>
-              formatCurrency(currency)
+              formatCurrency(currency) |>
+              DT$formatStyle(small_font, fontSize = "60%")
           })
         },
         once = TRUE
@@ -177,7 +188,7 @@ server <- function(id,
           replaceData(
             proxy          = dproxy,
             data           = df(),
-            clearSelection = FALSE,
+            clearSelection = clearSelection,
             resetPaging    = reset_paging,
             rownames       = row_names # https://github.com/rstudio/DT/issues/403
           )

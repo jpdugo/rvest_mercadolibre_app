@@ -26,6 +26,7 @@ register_search.MySQLConnection <- function(con, search, pages, df) {
        ({search}, {pages})",
     .con = con
   )
+
   dbExecute(con, sql)
 
   last_id <- dbGetQuery(
@@ -58,9 +59,9 @@ register_search.MySQLConnection <- function(con, search, pages, df) {
     values = values
   )
 
-  dbExecute(con, sql_table)
+  res <- dbExecute(con, sql_table)
 
-  message(glue("Registered {res} search."))
+  message(glue("Registered {res} rows."))
 }
 
 register_search.NULL <- function(con, search, pages, df) {
@@ -74,14 +75,17 @@ register_search.NULL <- function(con, search, pages, df) {
 #' @param search The search to be registered.
 #'
 #' @export
-get_search <- function(con, search) {
+get_search <- function(con) {
   UseMethod("get_search")
 }
 
-get_search.MySQLConnection <- function(con, search) {
+get_search.MySQLConnection <- function(con) {
   sql <- glue_sql(
     "SELECT
-       Search
+       SearchId,
+       Search,
+       Pages,
+       CreationDateTime
      FROM Search
      ORDER BY
        SearchId DESC;",
@@ -90,6 +94,35 @@ get_search.MySQLConnection <- function(con, search) {
   dbGetQuery(con, sql)
 }
 
-get_search.NULL <- function(con, search) {
+get_search.NULL <- function(con) {
+  invisible(NULL)
+}
+
+#' get SearchResults table from db
+#'
+#' @param con The database connection object.
+#' @param search_id Id to filter WHERE clause.
+#'
+#' @export
+get_search_results <- function(con, search_id) {
+  UseMethod("get_search_results")
+}
+
+get_search_results.MySQLConnection <- function(con, search_id) {
+  sql <- glue_sql(
+    "SELECT
+       SearchResultsId,
+       SearchId,
+       Title,
+       Href
+     FROM SearchResults
+     WHERE
+       SearchId = {search_id};",
+    .con = con
+  )
+  dbGetQuery(con, sql)
+}
+
+get_search_results.NULL <- function(con, search_id) {
   invisible(NULL)
 }
