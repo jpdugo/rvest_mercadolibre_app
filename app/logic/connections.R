@@ -22,15 +22,14 @@ connect_mysql.NULL <- function(value) {
 }
 
 #' @export
-connect_mysql.character <- function(value) {
-  c <- get(config = value)
-  print(paste("Connected to:", c$mysql$host))
+connect_mysql.character <- function(host) {
+  print(paste("Connected to:", host))
   DBI$dbConnect(
     RMariaDB$MariaDB(),
     dbname   = "Publications",
     username = "user",
     password = "password",
-    host     = c$mysql$host,
+    host     = host,
     port     = 3306
   )
 }

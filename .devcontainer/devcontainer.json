@@ -35,5 +35,8 @@
 			"files.defaultLanguage": "r"
 		}
 	},
-	"postCreateCommand": "pip install pre-commit"
+	"postCreateCommand": "pip install pre-commit ; docker compose up db -d",
+	"containerEnv": {
+    "RENV_PROFILE": "dev"
+  }
 }

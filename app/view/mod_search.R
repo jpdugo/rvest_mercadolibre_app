@@ -67,7 +67,7 @@ server <- function(id, con) {
       search <- mod_search_sidebar$server(
         id = "search_sidebar",
         con = con,
-        previous_search = if (is.null(old_searches)) NULL else old_searches |> pull("search")
+        previous_search = if (is.null(old_searches)) NULL else old_searches |> pull(Search)
       )
 
       current_search <- eventReactive(list(
@@ -106,7 +106,12 @@ server <- function(id, con) {
 
       # Save to Mysql if the search is not null
       observeEvent(current_search(), {
-        register_search(con, search$string, search$max_pages)
+        register_search(
+          con    = con,
+          search = search$string,
+          pages  = search$max_pages,
+          df     = current_search()
+       )
       })
 
       mod_proxy_dt$server(
