@@ -15,6 +15,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libharfbuzz-dev \
   libfribidi-dev \
   libfontconfig1-dev \
+  libmariadb-dev \
+  libmariadbclient-dev-compat \
   make pandoc zlib1g-dev && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home
@@ -23,8 +25,7 @@ COPY .Rprofile  renv.lock config.yml /home/
 
 ENV GITHUB_ACTIONS=true
 
-RUN Rscript -e "install.packages('renv')"
-RUN Rscript -e "renv::activate(profile = 'default')"
+COPY renv/activate.R /home/renv/activate.R
 RUN Rscript -e "renv::restore(prompt = FALSE)"
 
 COPY app.R /home/

@@ -188,7 +188,7 @@ server <- function(id,
           replaceData(
             proxy          = dproxy,
             data           = df(),
-            clearSelection = clearSelection,
+            clearSelection = clear_selection,
             resetPaging    = reset_paging,
             rownames       = row_names # https://github.com/rstudio/DT/issues/403
           )

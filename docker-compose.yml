@@ -8,8 +8,6 @@ services:
       - GITHUB_ACTIONS=true
     ports:
       - "8080:8080"
-    volumes:
-      - renv-cache:/root/.cache/R/renv/cache/v5/R-4.3/aarch64-unknown-linux-gnu
 
   db:
     build:
@@ -25,7 +23,6 @@ services:
       MYSQL_DATABASE: Publications
       MYSQL_USER: user
       MYSQL_PASSWORD: password
-  
+
 volumes:
-  renv-cache:
   db_data:

@@ -1,8 +1,6 @@
 {
   "bioconductor.version": null,
-  "external.libraries": [
-    "/usr/local/lib/R/site-library"
-  ],
+  "external.libraries": [],
   "ignored.packages": [],
   "package.dependency.fields": [
     "Imports",

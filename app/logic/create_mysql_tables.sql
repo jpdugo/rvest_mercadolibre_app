@@ -1,3 +1,5 @@
+USE Publications;
+
 CREATE TABLE IF NOT EXISTS Search (
   SearchId INT AUTO_INCREMENT,
   Search VARCHAR(255),
