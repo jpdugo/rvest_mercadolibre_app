@@ -111,7 +111,7 @@ server <- function(id, con) {
           search = search$string,
           pages  = search$max_pages,
           df     = current_search()
-       )
+        )
       })
 
       mod_proxy_dt$server(

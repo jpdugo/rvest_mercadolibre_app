@@ -42,12 +42,12 @@ register_search.MySQLConnection <- function(con, search, pages, df) {
       .con = con
     )
   )
-  
+
   values <- with(df, {
     sql_table <- glue(
       "({last_id |> pull(SearchId)}, '{title}', '{href}')"
     )
-  }) |> 
+  }) |>
     glue_collapse(sep = ", ")
 
   sql_table <- glue(
@@ -69,7 +69,7 @@ register_search.NULL <- function(con, search, pages, df) {
 
 
 #' get Search table from db
-#' 
+#'
 #' @param con The database connection object.
 #' @param search The search to be registered.
 #'
