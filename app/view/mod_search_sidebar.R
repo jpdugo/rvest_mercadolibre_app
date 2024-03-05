@@ -34,25 +34,23 @@ ui <- function(id) {
       )
     ),
     searchInput(
-      inputId = ns("search"),
-      label = "Search ML",
+      inputId     = ns("search"),
+      label       = "Search ML",
       placeholder = "Enter your search...",
-      btnSearch = icon("magnifying-glass"),
-      btnReset = icon("xmark"),
-      width = "100%"
+      btnSearch   = icon("magnifying-glass"),
+      btnReset    = icon("xmark"),
+      width       = "100%"
     ),
     pickerInput(
-      inputId = ns("history"),
-      label = "History",
-      choices = NULL,
-      options = list(
-        `live-search` = TRUE
-      ),
+      inputId    = ns("history"),
+      label      = "History",
+      choices    = NULL,
+      options    = list(`live-search` = TRUE),
       stateInput = TRUE
     ),
     shiny$radioButtons(
       inputId = ns("n_pages"),
-      label = "Number of Pages:",
+      label   = "Number of Pages:",
       choices = c("1", "5", "10", "Custom", "All")
     )
   )
@@ -67,29 +65,42 @@ ui <- function(id) {
 #' a \code{numeric} of length 1
 #'
 #' @export
-server <- function(id, previous_search = NULL) {
- shiny$moduleServer(id, function(input, output, session) {
+server <- function(id, con, previous_search = NULL) {
+  shiny$moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
     search_details <- shiny$reactiveValues(
-      string = NULL,
+      string    = NULL,
       max_pages = NULL,
-      reload = NULL
+      reload    = NULL
     )
 
     custom_value <- shiny$reactiveVal(0)
 
     history <- if (is.null(previous_search)) reactiveVal(NULL) else reactiveVal(previous_search)
 
+    observeEvent(history(),
+      {
+        updatePickerInput(
+          session      = session,
+          inputId      = "history",
+          selected     = "",
+          choices      = history(),
+          clearOptions = FALSE
+        )
+      },
+      autoDestroy = TRUE
+    )
+
     observeEvent(input$search, {
       req(input$search)
       show("reload")
       history(c(input$search, history()))
       updatePickerInput(
-        session,
-        "history",
-        selected = "",
-        choices = history(),
+        session      = session,
+        inputId      = "history",
+        selected     = "",
+        choices      = history(),
         clearOptions = FALSE
       )
       search_details$string <- input$search
@@ -122,11 +133,11 @@ server <- function(id, previous_search = NULL) {
         p("Enter the number of pages to scrape:"),
         numericInput(
           inputId = ns("pages"),
-          label = NULL,
-          min = 1,
-          max = 100,
-          value = 1,
-          width = "100%"
+          label   = NULL,
+          min     = 1,
+          max     = 100,
+          value   = 1,
+          width   = "100%"
         )
       ),
       fn = \() {
@@ -151,6 +162,8 @@ server <- function(id, previous_search = NULL) {
       }
     })
 
+    # This is useful when you want to trigger a recalculation in another module
+    # should improve search input functionality to drop the reload button
     observeEvent(input$reload, {
       search_details$reload <- input$reload
     })

@@ -1,19 +1,31 @@
+db_mode <- "none"
+
 box::use(
-  shiny[moduleServer, NS],
+  shiny[moduleServer, NS, onSessionEnded],
   DT[datatable, renderDT, DTOutput],
   shinyWidgets[searchInput],
   waiter[useWaiter],
   future[plan, multicore],
   bslib[page_navbar, bs_theme, nav_spacer, nav_panel],
   bsicons[bs_icon],
+  DBI,
+  config,
 )
 
 box::use(
   app/view/mod_search,
   app/view/mod_compare,
+  app/view/mod_search_prev,
+  app/logic/connections[connect_mysql],
 )
 
-plan(multicore, workers = 10)
+config <- config$get(config = db_mode)
+
+if (Sys.info()["sysname"] == "Windows") {
+  plan(multisession)
+} else {
+  plan(multicore)
+}
 
 #' @export
 ui <- function(id) {
@@ -21,7 +33,7 @@ ui <- function(id) {
   page_navbar(
     theme = bs_theme(
       version = 5,
-      preset = "darkly",
+      preset  = "darkly",
       primary = "#00bc8c"
     ),
     title = "Search MercadoLibre",
@@ -29,7 +41,7 @@ ui <- function(id) {
     nav_spacer(),
     mod_search$ui(ns("search")),
     mod_compare$ui(ns("compare")),
-    nav_panel(title = "About", icon = bs_icon("chat-left-dots"))
+    mod_search_prev$ui(ns("search_prev"))
   )
 }
 
@@ -37,7 +49,17 @@ ui <- function(id) {
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    search_result <- mod_search$server("search")
+
+    con <- connect_mysql(config$mysql$host)
+
+    search_result <- mod_search$server("search", con)
+
     mod_compare$server("compare", search_result)
+
+    mod_search_prev$server("search_prev", con)
+
+    onSessionEnded(function() {
+      if (!is.null(con)) DBI$dbDisconnect(con) else NULL
+    })
   })
 }

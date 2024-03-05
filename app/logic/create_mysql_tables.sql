@@ -1,0 +1,29 @@
+USE Publications;
+
+CREATE TABLE IF NOT EXISTS Search (
+  SearchId INT AUTO_INCREMENT,
+  Search VARCHAR(255),
+  Pages VARCHAR(255),
+  CreationDateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (SearchId)
+);
+
+CREATE TABLE IF NOT EXISTS SearchResults (
+  SearchResultsId INT AUTO_INCREMENT,
+  SearchId INT,
+  Title VARCHAR(255),
+  Href VARCHAR(2000),
+  CreationDateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (SearchResultsId),
+  FOREIGN KEY (SearchId) REFERENCES Search(SearchId)
+);
+
+CREATE TABLE IF NOT EXISTS ExtraInfo (
+  ExtraInfoId INT AUTO_INCREMENT,
+  SearchResultsId INT,
+  Price DECIMAL DEFAULT NULL,
+  Image VARCHAR(255) DEFAULT NULL,
+  CreationDateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (ExtraInfoId),
+  FOREIGN KEY (SearchResultsId) REFERENCES SearchResults(SearchResultsId)
+);
