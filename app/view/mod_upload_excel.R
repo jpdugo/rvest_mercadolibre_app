@@ -1,5 +1,5 @@
 box::use(
-  shiny[column, eventReactive, titlePanel, div],
+  shiny[column, eventReactive, titlePanel, div, HTML],
   shiny,
   utils[read.csv],
   shinyjs[reset],

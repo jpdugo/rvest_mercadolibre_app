@@ -17,6 +17,7 @@ box::use(
   app/view/mod_download_excel,
   app/logic/utils[format_href],
   app/logic/db_functions[get_search, get_search_results],
+  app/view/mod_download_excel,
 )
 
 #' @export
@@ -39,7 +40,8 @@ ui <- function(id) {
               tags$span(bs_icon("arrow-counterclockwise"), style = "text-align: right;")
             )
           ),
-          shiny$div(mod_proxy_dt$ui(ns("history")))
+          shiny$div(mod_proxy_dt$ui(ns("history"))),
+          mod_download_excel$ui(ns("download_excel"))
         ),
         mod_proxy_dt$ui(ns("history_table"))
       )
@@ -65,7 +67,7 @@ server <- function(id, con) {
       not_visible = NULL,
       short_cols = "Search",
       row_names = FALSE,
-      reset_paging = TRUE,
+      reset_paging = FALSE,
       page_length = 100,
       not_searchable = NULL,
       ordering = FALSE,
@@ -76,20 +78,25 @@ server <- function(id, con) {
       clear_selection = TRUE
     )
 
-    search_results_id <- eventReactive(selected_search$rows, {
-      if (!is.null(selected_search$rows)) {
-        slice(data(), selected_search$rows) |> pull(SearchId)
+    search_results_id <- eventReactive(
+      list(selected_search$rows, input$refresh),
+      {
+        if (!is.null(selected_search$rows)) {
+          slice(data(), selected_search$rows) |> pull(SearchId)
+        }
       }
+    )
+
+    search_results_data <- reactive({
+      req(search_results_id())
+      get_search_results(con, search_results_id()) |>
+        select(title = Title, href = Href) |>
+        format_href()
     })
 
     mod_proxy_dt$server(
       id = "history_table",
-      df = reactive({
-        req(search_results_id())
-        get_search_results(con, search_results_id()) |>
-          select(title = Title, href = Href) |>
-          format_href()
-      }),
+      df = search_results_data,
       not_visible = NULL,
       short_cols = "href",
       reset_paging = TRUE,
@@ -97,6 +104,11 @@ server <- function(id, con) {
       not_searchable = "href",
       ordering = TRUE,
       callback = 1
+    )
+
+    mod_download_excel$server(
+      id = "download_excel",
+      data = search_results_data
     )
 
   })
