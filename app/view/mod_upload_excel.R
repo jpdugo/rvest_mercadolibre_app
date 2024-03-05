@@ -1,5 +1,5 @@
 box::use(
-  shiny[column, eventReactive, titlePanel, div],
+  shiny[column, eventReactive, titlePanel, div, HTML],
   shiny,
   utils[read.csv],
   shinyjs[reset],
@@ -24,11 +24,7 @@ ui <- function(id) {
     shiny$fluidRow(
       column(6, titlePanel("Upload Excel")),
       column(6, div(
-        tagQuery(file_input)$
-          find("label")$
-          filter(\(x, i) i == 1)$
-          remove()$
-          allTags()
+        tagQuery(file_input)$find("label")$filter(\(x, i) i == 1)$remove()$allTags()
       ))
     )
   )

@@ -10,4 +10,6 @@ options(box.path = getwd())
 
 if (Sys.getenv("GITHUB_ACTIONS") != "true") {
   library(rhino)
+  options("shiny.autoreload" = TRUE)
+  library(shiny)
 }
