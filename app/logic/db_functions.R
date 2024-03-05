@@ -1,7 +1,8 @@
 box::use(
   DBI[dbGetQuery, dbExecute],
   glue[glue_sql, glue, glue_collapse],
-  dplyr[pull],
+  dplyr[pull, mutate],
+  stringr[str_replace_all],
 )
 
 #' Register a search in the database
@@ -44,7 +45,7 @@ register_search.MySQLConnection <- function(con, search, pages, df) {
     )
   )
 
-  values <- with(df, {
+  values <- with(df |> mutate(title = str_replace_all(title, "'", "''")), {
     sql_table <- glue(
       "({last_id |> pull(SearchId)}, '{title}', '{href}')"
     )
