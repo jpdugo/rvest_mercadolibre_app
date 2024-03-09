@@ -1,7 +1,7 @@
 # Load required packages
 box::use(
   glue[glue],
-  shiny[tags, observeEvent, tagList, reactiveVal, req, icon, updateRadioButtons],
+  shiny[tags, observeEvent, tagList, reactiveVal, req, icon],
   shiny,
   bslib,
   bsicons[bs_icon],
@@ -129,9 +129,9 @@ server <- function(id, con, previous_search = NULL) {
     mod_confirm_alert$server(
       id = "confirm_alert",
       button = custom_value,
-      text = div(
-        p("Enter the number of pages to scrape:"),
-        numericInput(
+      text = tags$div(
+        tags$p("Enter the number of pages to scrape:"),
+        shiny$numericInput(
           inputId = ns("pages"),
           label   = NULL,
           min     = 1,
@@ -148,13 +148,13 @@ server <- function(id, con, previous_search = NULL) {
 
     observeEvent(search_details$max_pages, {
       if (search_details$max_pages > 0 && input$n_pages != "All") {
-        updateRadioButtons(
+        shiny$updateRadioButtons(
           session = session,
           inputId = "n_pages",
           label   = glue("Number of Pages: {search_details$max_pages}")
         )
       } else {
-        updateRadioButtons(
+        shiny$updateRadioButtons(
           session = session,
           inputId = "n_pages",
           label   = glue("Number of Pages: All")

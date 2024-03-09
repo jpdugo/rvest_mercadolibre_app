@@ -36,3 +36,7 @@ connect_mysql.list <- function(config) {
     port     = 3306
   )
 }
+
+connect_mysql.config <- function(config) {
+  connect_mysql.list(as.list(config))
+}
