@@ -50,7 +50,7 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    con <- connect_mysql(config$mysql$host)
+    con <- connect_mysql(config)
 
     search_result <- mod_search$server("search", con)
 

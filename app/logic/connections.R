@@ -12,24 +12,27 @@ box::use(
 #' @param value  <\code{character}> Passed to `config::get()` unless it is NULL.
 #' @return A database connection object.
 #' @export
-connect_mysql <- function(value) {
+connect_mysql <- function(config) {
   UseMethod("connect_mysql")
 }
 
 #' @export
-connect_mysql.NULL <- function(value) {
+connect_mysql.NULL <- function(config) {
   invisible(NULL)
 }
 
 #' @export
-connect_mysql.character <- function(host) {
-  print(paste("Connected to:", host))
+connect_mysql.config <- function(config) {
+  on.exit({
+    print(paste("Connected to:", config$mysql$host))
+  })
+  
   DBI$dbConnect(
     RMariaDB$MariaDB(),
     dbname   = "Publications",
-    username = "user",
-    password = "password",
-    host     = host,
+    username = config$mysql$user,
+    password = config$mysql$password,
+    host     = config$mysql$host,
     port     = 3306
   )
 }
