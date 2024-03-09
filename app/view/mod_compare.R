@@ -61,9 +61,9 @@ server <- function(id, current_search, prev_search) {
       ordering = TRUE,
       callback = 1
     )
-    
+
     old_data <- reactiveVal(NULL)
-    
+
     observeEvent(prev_search(), {
       old_data(prev_search())
     })
@@ -71,7 +71,7 @@ server <- function(id, current_search, prev_search) {
     observeEvent(upload(), {
       old_data(upload())
     })
-    
+
     new_publications <- reactive({
       req(current_search(), old_data())
       current_search() |>
