@@ -9,7 +9,7 @@ box::use(
   glue[glue],
   bslib[layout_sidebar, card_header, sidebar, card, nav_panel],
   bsicons[bs_icon],
-  dplyr[pull],
+  dplyr[pull, distinct],
 )
 
 box::use(
@@ -62,7 +62,7 @@ server <- function(id, con) {
     function(input, output, session) {
       ns <- session$ns
 
-      old_searches <- get_search(con)
+      old_searches <- get_search(con) |> distinct(Search)
 
       search <- mod_search_sidebar$server(
         id = "search_sidebar",
