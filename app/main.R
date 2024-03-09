@@ -19,7 +19,7 @@ box::use(
   app/logic/connections[connect_mysql],
 )
 
-config <- config$get(config = db_mode)
+config <- if (db_mode != "none") config$get(config = db_mode)
 
 if (Sys.info()["sysname"] == "Windows") {
   plan(multisession)
