@@ -34,11 +34,6 @@ Configure
 ```bash
   docker compose up db -d
 ```
-or
-```bash
-  docker compose build
-  docker compose up
-```
 
 - With docker compose
 
