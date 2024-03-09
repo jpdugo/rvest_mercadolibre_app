@@ -109,7 +109,7 @@ server <- function(id, con) {
         register_search(
           con    = con,
           search = search$string,
-          pages  = search$max_pages,
+          pages  = if (search$max_pages == 42) "All" else search$max_pages,
           df     = current_search()
         )
       })

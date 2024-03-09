@@ -1,6 +1,6 @@
 box::use(
   shiny[
-    tagList, eventReactive, a, selectInput, observeEvent, req, reactive,
+    tagList, eventReactive, reactiveVal, selectInput, observeEvent, req, reactive,
     titlePanel
   ],
   shiny,
@@ -42,7 +42,7 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, current_search) {
+server <- function(id, current_search, prev_search) {
   shiny$moduleServer(id, function(input, output, session) {
     ns <- session$ns
     upload <- mod_upload_excel$server("upload_excel")
@@ -50,8 +50,8 @@ server <- function(id, current_search) {
     mod_proxy_dt$server(
       id = "upload_table",
       df = reactive({
-        req(upload())
-        upload() |> format_href()
+        req(old_data())
+        old_data() |> format_href()
       }),
       not_visible = NULL,
       short_cols = "href",
@@ -61,12 +61,22 @@ server <- function(id, current_search) {
       ordering = TRUE,
       callback = 1
     )
+    
+    old_data <- reactiveVal(NULL)
+    
+    observeEvent(prev_search(), {
+      old_data(prev_search())
+    })
 
+    observeEvent(upload(), {
+      old_data(upload())
+    })
+    
     new_publications <- reactive({
-      req(current_search(), upload())
+      req(current_search(), old_data())
       current_search() |>
         anti_join(
-          upload(),
+          old_data(),
           by = c("title")
         )
     })
