@@ -22,11 +22,11 @@ connect_mysql.NULL <- function(config) {
 }
 
 #' @export
-connect_mysql.config <- function(config) {
+connect_mysql.list <- function(config) {
   on.exit({
     print(paste("Connected to:", config$mysql$host))
   })
-  
+
   DBI$dbConnect(
     RMariaDB$MariaDB(),
     dbname   = "Publications",
