@@ -49,15 +49,10 @@ ui <- function(id) {
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
     con <- connect_mysql(config)
-
     search_result <- mod_search$server("search", con)
-
     search_previous <- mod_search_prev$server("search_prev", con)
-
     mod_compare$server("compare", search_result, search_previous)
-
     onSessionEnded(function() {
       if (!is.null(con)) DBI$dbDisconnect(con) else NULL
     })
