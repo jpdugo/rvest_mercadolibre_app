@@ -111,5 +111,7 @@ server <- function(id, con) {
       data = search_results_data
     )
 
+    return(search_results_data)
+
   })
 }

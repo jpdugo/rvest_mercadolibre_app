@@ -19,7 +19,7 @@ box::use(
   app/logic/connections[connect_mysql],
 )
 
-config <- config$get(config = db_mode)
+config <- if (db_mode != "none") config$get(config = db_mode)
 
 if (Sys.info()["sysname"] == "Windows") {
   plan(multisession)
@@ -40,8 +40,8 @@ ui <- function(id) {
     sidebar = NULL,
     nav_spacer(),
     mod_search$ui(ns("search")),
-    mod_compare$ui(ns("compare")),
-    mod_search_prev$ui(ns("search_prev"))
+    mod_search_prev$ui(ns("search_prev")),
+    mod_compare$ui(ns("compare"))
   )
 }
 
@@ -49,15 +49,10 @@ ui <- function(id) {
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
-    con <- connect_mysql(config$mysql$host)
-
+    con <- connect_mysql(config)
     search_result <- mod_search$server("search", con)
-
-    mod_compare$server("compare", search_result)
-
-    mod_search_prev$server("search_prev", con)
-
+    search_previous <- mod_search_prev$server("search_prev", con)
+    mod_compare$server("compare", search_result, search_previous)
     onSessionEnded(function() {
       if (!is.null(con)) DBI$dbDisconnect(con) else NULL
     })
