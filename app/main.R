@@ -1,7 +1,8 @@
-db_mode <- "none"
+db_mode <- "local"
 
 box::use(
   shiny[moduleServer, NS, onSessionEnded],
+  shiny,
   DT[datatable, renderDT, DTOutput],
   shinyWidgets[searchInput],
   waiter[useWaiter],
@@ -10,6 +11,7 @@ box::use(
   bsicons[bs_icon],
   DBI,
   config,
+  cookies
 )
 
 box::use(
@@ -30,18 +32,32 @@ if (Sys.info()["sysname"] == "Windows") {
 #' @export
 ui <- function(id) {
   ns <- NS(id)
-  page_navbar(
-    theme = bs_theme(
-      version = 5,
-      preset  = "darkly",
-      primary = "#00bc8c"
-    ),
-    title = "Search MercadoLibre",
-    sidebar = NULL,
-    nav_spacer(),
-    mod_search$ui(ns("search")),
-    mod_search_prev$ui(ns("search_prev")),
-    mod_compare$ui(ns("compare"))
+  cookies$add_cookie_handlers(
+    page_navbar(
+      theme = bs_theme(
+        version = 5,
+        preset  = "darkly",
+        primary = "#00bc8c"
+      ),
+      title = shiny$sliderInput(
+        ns("number_selector"),
+        label = paste(
+          "Select a number.",
+          "This selector sets the cookie value.",
+          "It also initializes with the cookie value.",
+          "Refresh to see it remembered.",
+          sep = "\n"
+        ),
+        min = 1,
+        max = 10,
+        value = 1
+      ),
+      sidebar = NULL,
+      nav_spacer(),
+      mod_search$ui(ns("search")),
+      mod_search_prev$ui(ns("search_prev")),
+      mod_compare$ui(ns("compare"))
+    )
   )
 }
 
@@ -50,6 +66,26 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     con <- connect_mysql(config)
+
+    shiny$observeEvent(
+    input$number_selector,
+    {
+      cookies$set_cookie(
+        cookie_name = "selected_number",
+        cookie_value = input$number_selector
+      )
+    }
+   )
+
+   shiny$observeEvent(
+    cookies$get_cookie("selected_number"),
+    shiny$updateSliderInput(
+      inputId = "number_selector",
+      value = cookies$get_cookie("selected_number")
+    ),
+    once = TRUE
+   )
+
     search_result <- mod_search$server("search", con)
     search_previous <- mod_search_prev$server("search_prev", con)
     mod_compare$server("compare", search_result, search_previous)
