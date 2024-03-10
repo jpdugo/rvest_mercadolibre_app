@@ -33,7 +33,7 @@ connect_mysql.list <- function(config) {
     username = config$mysql$user,
     password = config$mysql$password,
     host     = config$mysql$host,
-    port     = 3306
+    port     = config$mysql$port
   )
 }
 

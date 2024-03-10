@@ -4,13 +4,14 @@ default:
   mysql:
     user: "user"
     password: "password"
+    port: "3306"
 
 deploy:
   mysql:
     host: !expr Sys.getenv("MYSQL_HOST")
     user: !expr Sys.getenv("MYSQL_USER")
     password: !expr Sys.getenv("MYSQL_PASSWORD")
-
+    port: !expr Sys.getenv("MYSQL_PORT")
 
 compose:
   mysql:
