@@ -1,4 +1,4 @@
-db_mode <- "none"
+db_mode <- "local"
 
 box::use(
   shiny[moduleServer, NS, onSessionEnded],
@@ -10,6 +10,7 @@ box::use(
   bsicons[bs_icon],
   DBI,
   config,
+  logger,
 )
 
 box::use(
@@ -18,6 +19,8 @@ box::use(
   app/view/mod_search_prev,
   app/logic/connections[connect_mysql],
 )
+
+logger$log_threshold(if (db_mode != "deploy") {logger$DEBUG} else {logger$INFO})
 
 config <- if (db_mode != "none") config$get(config = db_mode)
 
