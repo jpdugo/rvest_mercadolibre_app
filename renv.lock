@@ -292,23 +292,11 @@
     },
     "bslib": {
       "Package": "bslib",
-      "Version": "0.5.1",
-      "Source": "Repository",
+      "Version": "0.8.0",
+      "OS_type": null,
       "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "base64enc",
-        "cachem",
-        "grDevices",
-        "htmltools",
-        "jquerylib",
-        "jsonlite",
-        "memoise",
-        "mime",
-        "rlang",
-        "sass"
-      ],
-      "Hash": "283015ddfbb9d7bf15ea9f0b5698f0d9"
+      "Source": "Repository",
+      "Path": "/Users/juan/Library/Caches/org.R-project.R/R/renv/binary/R-4.4/aarch64-apple-darwin20/repository/bslib/bslib_0.8.0.tgz"
     },
     "cachem": {
       "Package": "cachem",
@@ -1286,17 +1274,11 @@
     },
     "sass": {
       "Package": "sass",
-      "Version": "0.4.5",
-      "Source": "Repository",
+      "Version": "0.4.9",
+      "OS_type": null,
       "Repository": "CRAN",
-      "Requirements": [
-        "R6",
-        "fs",
-        "htmltools",
-        "rappdirs",
-        "rlang"
-      ],
-      "Hash": "2bb4371a4c80115518261866eab6ab11"
+      "Source": "Repository",
+      "Path": "/Users/juan/Library/Caches/org.R-project.R/R/renv/binary/R-4.4/aarch64-apple-darwin20/repository/sass/sass_0.4.9.tgz"
     },
     "selectr": {
       "Package": "selectr",
@@ -1313,37 +1295,11 @@
     },
     "shiny": {
       "Package": "shiny",
-      "Version": "1.7.5",
-      "Source": "Repository",
+      "Version": "1.9.1",
+      "OS_type": null,
       "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "R6",
-        "bslib",
-        "cachem",
-        "commonmark",
-        "crayon",
-        "ellipsis",
-        "fastmap",
-        "fontawesome",
-        "glue",
-        "grDevices",
-        "htmltools",
-        "httpuv",
-        "jsonlite",
-        "later",
-        "lifecycle",
-        "methods",
-        "mime",
-        "promises",
-        "rlang",
-        "sourcetools",
-        "tools",
-        "utils",
-        "withr",
-        "xtable"
-      ],
-      "Hash": "438b99792adbe82a8329ad8697d45afe"
+      "Source": "Repository",
+      "Path": "/Users/juan/Library/Caches/org.R-project.R/R/renv/binary/R-4.4/aarch64-apple-darwin20/repository/shiny/shiny_1.9.1.tgz"
     },
     "shinyWidgets": {
       "Package": "shinyWidgets",

@@ -82,7 +82,7 @@ server <- function(id, con) {
         search$string,
         search$reload
       ), {
-        req(search$string)
+        req(!is.null(search$string))
         waiter_show(
           html = spin_chasing_dots(),
           color = "#2a2a2a"
