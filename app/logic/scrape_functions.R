@@ -13,9 +13,9 @@ box::use(
 
 # 1 Selectors -------------------------------------------------------------------------------------
 
-title <- "h2.ui-search-item__title"
+title <- "h2.poly-box"
 image <- "img.ui-pdp-image.ui-pdp-gallery__figure__image"
-href <- "a.ui-search-item__group__element.ui-search-link"
+href <- "a.poly-component__title"
 href_alt <- glue(
   "{div} {a}",
   div = "div.ui-search-item__group__element.ui-search-item__title-grid",

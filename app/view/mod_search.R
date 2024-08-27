@@ -10,6 +10,7 @@ box::use(
   bslib[layout_sidebar, card_header, sidebar, card, nav_panel],
   bsicons[bs_icon],
   dplyr[pull, distinct],
+  logger,
 )
 
 box::use(
@@ -113,6 +114,8 @@ server <- function(id, con) {
 
       # Save to Mysql if the search is not null
       observeEvent(current_search(), {
+        logger$log_debug("Saving {nrow(current_search())} rows")
+
         register_search(
           con    = con,
           search = search$string,
