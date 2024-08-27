@@ -1,4 +1,4 @@
-db_mode <- "local"
+db_mode <- "none"
 
 box::use(
   shiny[moduleServer, NS, onSessionEnded],
