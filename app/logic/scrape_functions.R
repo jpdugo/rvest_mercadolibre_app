@@ -15,7 +15,7 @@ box::use(
 
 title <- "h2.poly-box"
 image <- "img.ui-pdp-image.ui-pdp-gallery__figure__image"
-href <- "a.poly-component__title"
+href <- "h2.poly-box.poly-component__title a" #"a.poly-component__title"
 href_alt <- glue(
   "{div} {a}",
   div = "div.ui-search-item__group__element.ui-search-item__title-grid",
